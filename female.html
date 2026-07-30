@@ -151,7 +151,7 @@ ul.plainlist li::before{content:"·"; color:var(--muted); margin-right:8px}
 
 /* ============ EXERCISE LIBRARY ============ */
 .libcard{margin-bottom:12px; scroll-margin-top:120px}
-.libcard.flash{animation:flash 1.2s ease}
+.libcard.flash,.ex.flash{animation:flash 1.2s ease}
 @keyframes flash{0%,60%{box-shadow:0 0 0 2px var(--accent)}100%{box-shadow:none}}
 .muscle{font-size:.8rem; color:var(--accent); font-weight:600}
 .cues{margin:8px 0 0; padding-left:0; list-style:none}
@@ -266,7 +266,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 <header class="app">
   <div class="wrap">
     <div class="topbar">
-      <h1>🍑 Glute Builder <span class="ver">v1.4</span></h1>
+      <h1>🍑 Glute Builder <span class="ver">v1.5</span></h1>
       <div class="grow"></div>
       <span class="date" id="todayLabel"></span>
       <button id="btnTheme" title="Switch light / dark">🌓</button>
@@ -465,7 +465,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Glute Builder v1.4 · 30 July 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Glute Builder v1.5 · 30 July 2026</p>
   </section>
 
 </main>
@@ -858,12 +858,25 @@ function switchView(name){
   if(location.hash !== '#'+name){ try{ history.replaceState(null,'','#'+name); }catch(e){} }
   if(name==='dashboard') renderDashboard();
   if(name==='progress') renderProgress();
+  /* coming back from a "How to" video → land on the exercise you were doing */
+  if(name==='workout' && lastHowToSlug){
+    const slug=lastHowToSlug; lastHowToSlug=null;
+    const card=$('#exerciseList .ex[data-slug="'+slug+'"]');
+    if(card){
+      setTimeout(()=>{
+        card.scrollIntoView({behavior:'auto', block:'center'});
+        card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash');
+      }, 30);
+      return;
+    }
+  }
   window.scrollTo({top:0});
 }
 
 /* ---------- workout ---------- */
 let currentDay = 'A';
 let currentLoc = 'gym';
+let lastHowToSlug = null;   /* set when "▶ How to" jumps to a video, so Workout returns to that exercise */
 /* current program (gym or home) + small label helpers */
 const P = () => PROGRAMS[currentLoc] || PROGRAMS.gym;
 const locOf = s => (s && s.loc === 'home') ? 'home' : 'gym';   /* older sessions had no loc → gym */
@@ -978,7 +991,7 @@ function renderWorkout(){
     if(prev) grow.appendChild(el('div','exlast','Last time: '+setSummary(ex, prev.sets)));
     head.appendChild(grow);
     const vbtn=el('button','vidlink','▶ How to');
-    vbtn.addEventListener('click', ()=>{ switchView('exercises'); flashLib(ex.slug); });
+    vbtn.addEventListener('click', ()=>{ lastHowToSlug=ex.slug; switchView('exercises'); flashLib(ex.slug); });
     head.appendChild(vbtn);
     card.appendChild(head);
 
