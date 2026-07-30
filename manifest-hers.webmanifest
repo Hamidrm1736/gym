@@ -1,6 +1,6 @@
 {
-  "name": "Glute Builder",
-  "short_name": "Glutes",
+  "name": "Gym Tracker",
+  "short_name": "Gym",
   "start_url": "./female.html",
   "scope": "./",
   "display": "standalone",
