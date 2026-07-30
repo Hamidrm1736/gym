@@ -165,6 +165,20 @@ ul.plainlist li::before{content:"·"; color:var(--muted); margin-right:8px}
 .playbtn::after{content:""; display:block; width:0; height:0; border-left:22px solid #fff; border-top:14px solid transparent; border-bottom:14px solid transparent; margin-left:6px; filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))}
 .playbtn:hover{background:rgba(0,0,0,.30)}
 .novid{display:flex; align-items:center; justify-content:center; height:100%; color:var(--muted); font-size:.85rem}
+.steps{margin-top:10px; border:1px solid var(--hairline); border-radius:10px; padding:8px 10px; background:var(--surface-2)}
+.steps summary{font-size:.85rem; font-weight:700; color:var(--accent); cursor:pointer; list-style:none}
+.steps summary::-webkit-details-marker{display:none}
+.steps summary::after{content:" ▾"; color:var(--muted); font-weight:400}
+.steps[open] summary::after{content:" ▴"}
+.stepgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(138px,1fr)); gap:10px; margin-top:10px; align-items:start}
+.stepgrid figure{margin:0}
+.stepgrid img{width:100%; height:auto; background:#fff; border:1px solid var(--hairline); border-radius:8px; display:block; min-height:60px}
+.stepgrid .imgfail img{display:none}
+.stepgrid .wide{grid-column:1 / -1}
+.stepgrid figcaption{font-size:.78rem; color:var(--ink-2); margin-top:5px; line-height:1.35}
+.stepnum{font-weight:700; color:var(--accent)}
+.stepnote{font-size:.78rem; color:var(--ink-2); margin-top:9px; padding:6px 8px; border-left:3px solid var(--series-2); background:var(--wash); border-radius:0 6px 6px 0}
+.stepcred{font-size:.72rem; color:var(--muted); margin-top:8px}
 
 /* ============ MEALS ============ */
 .mealslot{padding:10px 0; border-bottom:1px solid var(--hairline)}
@@ -266,7 +280,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 <header class="app">
   <div class="wrap">
     <div class="topbar">
-      <h1>💪 Gym Tracker <span class="ver">v1.7</span></h1>
+      <h1>💪 Gym Tracker <span class="ver">v1.8</span></h1>
       <div class="grow"></div>
       <span class="date" id="todayLabel"></span>
       <button id="btnTheme" title="Switch light / dark">🌓</button>
@@ -464,7 +478,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.7 · 30 July 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.8 · 30 July 2026</p>
   </section>
 
 </main>
@@ -768,6 +782,108 @@ const VIDEOS = {
   'h-glute-bridge':     {id:'0od5lwWMGV8', title:'How To: Barbell Glute Bridge — 3 Golden Rules', channel:'ScottHermanFitness'},
   'h-calf-raise':       {id:'HvvqTpTongY', title:'How To: Standing Dumbbell Calf Raise', channel:'Live Lean TV'}
 };
+
+/* Step-by-step pictures — Everkinetic anatomy illustrations (CC BY-SA 3.0) via Wikimedia Commons.
+   i: [filename, caption] in order  ·  n: note when the picture shows a close variation.
+   Needs internet, same as the videos. */
+const STEP_IMG = f => 'https://commons.wikimedia.org/wiki/Special:FilePath/' + encodeURIComponent(f) + '?width=400';
+const STEPS = {
+  'incline-db-press':{i:[
+    ['Dumbbell-incline-bench-press-1.png','Sit back on the 30–45° bench, feet flat. Dumbbells at chest level, elbows about 45° from the body.'],
+    ['Dumbbell-incline-bench-press-2.png','Press up and slightly inward, squeeze the chest at the top — then take 2–3 seconds coming back down.']]},
+  'cable-fly':{i:[
+    ['Cable-crossover-1.png','Pulleys at chest height, one small step forward. Arms open wide with a soft bend in the elbows — keep that bend all set.'],
+    ['Cable-crossover-2.png','Hands meet in front of the chest, like hugging a barrel. Squeeze 1 second, then open slowly to a comfortable stretch.']]},
+  'seated-cable-row':{i:[
+    ['Cable-seated-rows-1.png','Sit tall, chest up, arms stretched fully forward. No slouching or rounding at the bottom.'],
+    ['Cable-seated-rows-2.png','Pull the handle to your belly button with the elbows close to the body, and squeeze the shoulder blades together 1 second.']]},
+  'lateral-raise':{i:[
+    ['Dumbbell-lateral-raises-1.png','Dumbbells at your sides, slight bend in the elbows, lean a touch forward.'],
+    ['Dumbbell-lateral-raises-2.png','Raise out to the side to shoulder height ONLY, leading with the elbows — then lower over 2–3 seconds.']]},
+  'leg-press':{i:[
+    ['Leg-press-1-1024x670.png','Feet shoulder-width in the middle of the platform, back and hips flat against the seat.'],
+    ['Leg-press-2-1024x670.png','Lower until the knees reach about 90°, knees tracking in line with the toes, then push through the whole foot — don’t slam the knees straight.']]},
+  'cable-crunch':{i:[
+    ['Seated ab crunch with cable 1.svg','Hold the rope beside your head. Hips stay still — only the spine moves.'],
+    ['Seated ab crunch with cable 2.svg','Crunch the ribs down toward the hips, rounding the spine. Return slowly against the weight.']],
+    n:'The picture shows the seated version — you do the same movement kneeling on the floor.'},
+  'lat-pulldown':{i:[
+    ['Wide-grip-lat-pull-down-1.gif','Grip a little wider than the shoulders, chest up, arms straight overhead.'],
+    ['Wide-grip-lat-pull-down-2.gif','Pull the bar to the upper chest, driving the elbows down and back. Squeeze 1 second, then slow on the way up.']]},
+  'db-shoulder-press':{i:[
+    ['Dumbbell-shoulder-press-1.png','Back supported, dumbbells starting at ear height.'],
+    ['Dumbbell-shoulder-press-2.png','Press up until the arms are straight (not locked hard), with a slight arc inward at the top. Lower slowly back to the ears.']]},
+  'incline-machine-press':{i:[
+    ['Incline-chest-press-1.png','Set the seat so the handles start at upper-chest height.'],
+    ['Incline-chest-press-2.png','Press smoothly and squeeze the chest 1 second at the top, then lower slowly to a comfortable stretch.']]},
+  'db-rdl':{i:[
+    ['Dumbbell dead lifts 1.svg','Dumbbells in front of the thighs, soft knees, back flat and chest proud.'],
+    ['Dumbbell dead lifts 2.svg','Push the hips BACK, sliding the weights down the thighs until you feel the hamstrings stretch — then drive the hips forward and squeeze.']]},
+  'side-plank':{i:[
+    ['Side-plank-1.png','Elbow directly under the shoulder, body in one straight line.'],
+    ['Side-plank-2.png','Push the hips up and slightly forward and hold, breathing normally. Then swap sides.']]},
+  'goblet-squat':{i:[
+    ['Squats using dumbbells 1.svg','Feet shoulder-width, chest tall, weight held steady.'],
+    ['Squats using dumbbells 2.svg','Sit down between the heels until the thighs are about parallel, then drive up through the mid-foot.']],
+    n:'The picture shows dumbbells at the sides — you hold ONE dumbbell vertically against your chest.'},
+  'low-high-cable-fly':{i:[
+    ['Incline-cable-flyes-1.png','Pulleys at the lowest setting, step forward, slight forward lean, soft elbows.'],
+    ['Incline-cable-flyes-2.png','Sweep the hands up and in, finishing at eye level. Squeeze the upper chest 1 second, lower slowly.']]},
+  'push-up':{i:[
+    ['Push ups 1.svg','Hands a little wider than the shoulders, body one straight line — squeeze the glutes.'],
+    ['Push ups 2.svg','Chest down to about a fist above the floor, then push the floor away and squeeze the chest at the top.'],
+    ['Push up feet elevated 2 1.svg','Step up when normal push-ups get easy: same set-up, feet on the bench.'],
+    ['Push up feet elevated 2 2.svg','Feet-up bottom position. This version presses about 70% of your bodyweight — more than your gym bench.']]},
+  'one-arm-db-row':{i:[
+    ['Rear deltoid row dumbbell 1.svg','Back flat, long stretch at the bottom, elbow close to the body.'],
+    ['Rear deltoid row dumbbell 2.svg','Pull the dumbbell to your hip pocket — not your chest — squeeze 1 second, then lower with a long stretch.']],
+    n:'The picture shows both arms with the bench for support — you do one arm at a time, hand and knee on the bench.'},
+  'leg-curl':{i:[
+    ['Seated-leg-curl-1.png','Pad snug just above the heels, legs straight to start.'],
+    ['Seated-leg-curl-2.png','Curl smoothly to a full squeeze and hold 1 second, then take 2–3 seconds on the way back — that’s where the muscle is built.']]},
+  'bicycle-crunch':{i:[
+    ['Air bike 1.svg','On your back, hands light behind the head, shoulder blades off the floor.'],
+    ['Air bike 2.svg','Elbow toward the OPPOSITE knee while the other leg extends. Rotate through the ribs, not the neck — slow and controlled.']]},
+  /* ---- home-only movements ---- */
+  'h-db-flye':{i:[
+    ['Dumbbell-flys-1.png','Lie back with the dumbbells above the chest, soft bend in the elbows.'],
+    ['Dumbbell-flys-2.png','Open wide like hugging a barrel to a comfortable stretch, then bring them back together over the chest and squeeze 1 second.']]},
+  'h-db-row':{i:[
+    ['Rear deltoid row dumbbell 1.svg','Feet hip-width, hinge forward to about 45°, knees soft, back flat and braced.'],
+    ['Rear deltoid row dumbbell 2.svg','Row both dumbbells to your hip pockets and squeeze the shoulder blades a full second. 3 seconds down every rep.']],
+    n:'The picture uses the bench for support — you do it standing, hinged forward.'},
+  'h-bb-row':{i:[
+    ['Reverse-grip-bent-over-rows-1.png','Hinge forward with a flat back, bar hanging at arms’ length.'],
+    ['Reverse-grip-bent-over-rows-2.png','Pull the bar to your belly, elbows back, squeeze 1 second, then lower under control.']],
+    n:'The picture shows an underhand grip — palms-down works the same way.'},
+  'h-rear-delt':{i:[
+    ['Lying-rear-lateral-raise-1.png','Chest resting on the incline bench, arms hanging straight down.'],
+    ['Lying-rear-lateral-raise-2.png','Raise out to the sides with soft elbows and squeeze the back of the shoulders. Start with NO weight.']]},
+  'h-bb-rdl':{i:[
+    ['Romanian dead lift 1.svg','Bar against the thighs, soft knees, chest proud, back flat.'],
+    ['Romanian dead lift 2.svg','Hips BACK with the bar sliding down the legs. Stop where the back would start to round, then drive the hips forward.']]},
+  'h-leg-raise':{i:[
+    ['Bent-knee-hip-raise-1.png','On your back, knees bent, lower back pressed into the floor.'],
+    ['Bent-knee-hip-raise-2.png','Curl the knees toward the chest and tilt the pelvis up — that tilt is the ab part. Lower slowly, no swinging.']]},
+  'h-glute-bridge':{i:[
+    ['Bridge-1.png','On your back, heels close to your bum, bar resting across the hips (use a towel or mat as padding).'],
+    ['Bridge-2.png','Drive through the heels until the hips are level with the knees, squeeze the glutes 1 second, then lower under control.']]},
+  'h-reverse-lunge':{i:[
+    ['Rear-lunges-1-1024x1015.png','Stand tall, then step one foot straight back.'],
+    ['Rear-lunges-2-1024x1015.png','Lower until both knees are about 90°, then push through the FRONT heel to stand back up.']],
+    n:'Need balance? Touch a wall or door frame — never the bench, it can slide.'},
+  'h-calf-raise':{i:[
+    ['Calf-raises-1.png','Stand tall, weight through the balls of the feet.'],
+    ['Calf-raises-2.png','Rise up as high as you can, hold 1 second at the top, then lower slowly for a stretch.']],
+    n:'The picture shows bodyweight — hold the dumbbells at your sides to make it hard enough.'}
+};
+/* same movement, different slug */
+const STEP_ALIAS = {
+  'h-incline-db-press':'incline-db-press', 'h-pushup':'push-up', 'h-lateral-raise':'lateral-raise',
+  'h-db-shoulder-press':'db-shoulder-press', 'h-goblet':'goblet-squat', 'h-bicycle-crunch':'bicycle-crunch',
+  'h-side-plank':'side-plank'
+};
+const stepsFor = slug => STEPS[slug] || STEPS[STEP_ALIAS[slug]] || null;
 
 const MEALS = [
   { day:'Monday', slots:[
@@ -1214,6 +1330,35 @@ function renderHistory(){
   });
 }
 /* ---------- exercise library ---------- */
+function stepsCard(slug){
+  const s=stepsFor(slug); if(!s) return null;
+  const d=document.createElement('details'); d.className='steps';
+  const sum=document.createElement('summary');
+  sum.textContent='🖼 Step-by-step pictures ('+s.i.length+')';
+  d.appendChild(sum);
+  const grid=el('div','stepgrid');
+  s.i.forEach(([file, cap], n)=>{
+    const fig=document.createElement('figure');
+    const img=el('img'); img.decoding='async';
+    /* the pictures are only downloaded the first time this drop-down is opened */
+    img.dataset.src=STEP_IMG(file); img.alt='Step '+(n+1)+' — '+cap;
+    img.addEventListener('error', ()=>fig.classList.add('imgfail'));
+    /* landscape drawings (lying-down moves) get the full width so they stay readable */
+    img.addEventListener('load', ()=>{ if(img.naturalWidth > img.naturalHeight*1.15) fig.classList.add('wide'); });
+    const fc=document.createElement('figcaption');
+    fc.appendChild(el('span','stepnum', (n+1)+' · '));
+    fc.appendChild(document.createTextNode(cap));
+    fig.appendChild(img); fig.appendChild(fc); grid.appendChild(fig);
+  });
+  d.addEventListener('toggle', ()=>{
+    if(!d.open) return;
+    grid.querySelectorAll('img[data-src]').forEach(im=>{ im.src=im.dataset.src; im.removeAttribute('data-src'); });
+  });
+  d.appendChild(grid);
+  if(s.n) d.appendChild(el('div','stepnote', s.n));
+  d.appendChild(el('div','stepcred','Drawings: Everkinetic (CC BY-SA 3.0) via Wikimedia Commons · needs internet'));
+  return d;
+}
 function renderLibrary(){
   const list=$('#libraryList'); list.textContent='';
   const seen=new Set();
@@ -1255,6 +1400,8 @@ function renderLibrary(){
         box.appendChild(el('div','novid','No video yet — search YouTube: "'+ex.name+' proper form"'));
         card.appendChild(box);
       }
+
+      const sc=stepsCard(ex.slug); if(sc) card.appendChild(sc);
 
       const cues=el('ul','cues'); ex.cues.forEach(c=>cues.appendChild(el('li','',c)));
       card.appendChild(cues);
