@@ -1,5 +1,5 @@
 /* Offline cache for the two gym trackers — bump CACHE when you upload new files */
-const CACHE = 'gym-pwa-v9';
+const CACHE = 'gym-pwa-v10';
 const ASSETS = ['./male.html', './female.html', './icon-his.png', './icon-hers.png', './manifest-his.webmanifest', './manifest-hers.webmanifest'];
 
 self.addEventListener('install', e => {
