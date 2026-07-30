@@ -464,7 +464,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Glute Builder v1.2 · 30 July 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Glute Builder v1.3 · 30 July 2026</p>
   </section>
 
 </main>
@@ -600,7 +600,8 @@ const HOME_PROGRAM = {
       exercises:[
         { slug:'hw-hip-thrust', name:'Barbell hip thrust (back on the bench)', sets:4, reps:'10–12', type:'w', rest:150, start:'Bar only (≈20 kg) — learn the set-up, then add a 15 kg plate each side',
           muscles:'THE glute builder — the whole glute, especially the lower part',
-          cues:['Sit on the floor with your upper back against the bench, legs straight, and roll the bar up over your thighs into the crease of the hips',
+          cues:['FIRST: wedge the bench lengthways against a wall so it cannot slide backwards — never thrust against a free-standing bench',
+                'Sit on the floor with your upper back against the bench, legs straight, and roll the bar up over your thighs into the crease of the hips',
                 'ALWAYS pad the bar — folded towel or yoga mat. Bare steel on the hips genuinely hurts',
                 'If the bar will not roll over your thighs, rest it on a plate first so it starts higher',
                 'Feet hip-width; at the top your shins should be vertical','Chin tucked, ribs down — drive through the heels and squeeze the glutes hard for 1–2 seconds at the top'],
@@ -617,10 +618,10 @@ const HOME_PROGRAM = {
           muscles:'Upper & side glutes — rounds out the top and sides',
           cues:['Lie on your side, body in one straight line, top leg straight','Lift the heel up and slightly BACK, toes pointing a little down','Pause 1 second at the top — feel the side of the hip working','Lower slowly, 3 seconds. No rest at the bottom'],
           mistakes:['Rolling the hips backward — keep them stacked','Swinging the leg with momentum'] },
-        { slug:'hw-one-arm-row', name:'One-arm dumbbell row on the bench', sets:3, reps:'15–20 / side', type:'w', rest:90, start:'10 kg — slow 3-second lowering, 1-second squeeze at the top',
+        { slug:'hw-db-row', name:'Bent-over dumbbell row (both arms, standing)', sets:3, reps:'15–20', type:'w', rest:90, start:'10 kg dumbbells — slow 3-second lowering, 1-second squeeze. No bench needed',
           muscles:'Back — posture, and balances all the leg work',
-          cues:['One hand and knee on the bench, back flat','Pull the dumbbell to your hip pocket, not your chest','Elbow stays close to the body','The weight is light, so the last few reps must feel genuinely hard — squeeze a full second at the top'],
-          mistakes:['Twisting the torso to lift more','Yanking with the biceps only'] },
+          cues:['Feet hip-width, soft knees, hinge forward until the chest points at the floor ahead','Back flat and braced the whole set','Pull both dumbbells to your hip pockets, elbows close to the body','Squeeze the shoulder blades 1 second, lower slowly — the light weight only works if the last reps feel hard'],
+          mistakes:['Standing up a little each rep to heave the weight','Rounding the lower back'] },
         { slug:'hw-plank', name:'Plank', sets:2, reps:'20–40 sec', type:'t', rest:60, start:'Bodyweight — hold 20–30 s',
           muscles:'Deep core — flattens and tightens the tummy wall',
           cues:['Elbows under shoulders, body one straight line','Squeeze the glutes, tuck the tailbone slightly','Keep breathing — don’t hold your breath'],
@@ -635,7 +636,7 @@ const HOME_PROGRAM = {
       exercises:[
         { slug:'hw-incline-pushup', name:'Push-ups, hands on the bench', sets:3, reps:'8–15', type:'r', rest:90, start:'Hands on the bench — the higher the hands, the easier it is',
           muscles:'Chest, shoulders, arms — the perfect starter push-up',
-          cues:['Hands on the bench a little wider than the shoulders','Body one straight line — squeeze the glutes','Chest down to the bench, elbows about 45° from the body','Too hard? Raise the bench backrest higher. Too easy? Move to the floor'],
+          cues:['Bench short-end against the wall so it cannot slide away from you','Hands on the bench a little wider than the shoulders','Body one straight line — squeeze the glutes','Chest down to the bench, elbows about 45° from the body','Too hard? Raise the bench backrest higher. Too easy? Move to the floor'],
           mistakes:['Hips sagging','Small half reps'] },
         { slug:'hw-db-floor-press', name:'Dumbbell floor press', sets:3, reps:'12–20', type:'w', rest:90, start:'10 kg dumbbells — your arms rest on the floor between reps, completely safe alone',
           muscles:'Chest & triceps',
@@ -651,7 +652,7 @@ const HOME_PROGRAM = {
           mistakes:['Turning it into a row by pulling the elbows back','Swinging the whole body'] },
         { slug:'hw-sl-hip-thrust', name:'Single-leg hip thrust (shoulders on bench)', sets:3, reps:'10–12 / side', type:'r', rest:90, start:'Bodyweight — this replaces the cable kickback at home',
           muscles:'Lower glute, one side at a time — the fold where glute meets hamstring',
-          cues:['Shoulders on the bench, one foot planted, the other knee pulled toward your chest','Drive through the heel until the hips reach a straight line','Squeeze the glute for 2 full seconds at the top','Hips stay level — don’t let one side sag down'],
+          cues:['Bench wedged against the wall first — same rule as the barbell hip thrust','Shoulders on the bench, one foot planted, the other knee pulled toward your chest','Drive through the heel until the hips reach a straight line','Squeeze the glute for 2 full seconds at the top','Hips stay level — don’t let one side sag down'],
           mistakes:['Arching the lower back instead of squeezing the glute','Hips twisting as you press up'] },
         { slug:'hw-dead-bug', name:'Dead bug', sets:2, reps:'10 / side', type:'r', rest:60, start:'Bodyweight — slow and controlled',
           muscles:'Deep core — trains the tummy to stay flat',
@@ -669,10 +670,10 @@ const HOME_PROGRAM = {
           muscles:'Hamstrings & lower glutes — with hip thrusts, the top glute pair',
           cues:['Stand holding the bar at your thighs, knees soft','Push the hips BACK and slide the bar down the thighs — a hinge, not a squat','Back stays flat the whole time; stop at a strong stretch behind the legs (about knee height)','Drive the hips forward to stand and squeeze the glutes at the top'],
           mistakes:['Rounding the back — lighten the bar immediately','Bending the knees more and turning it into a squat'] },
-        { slug:'hw-step-up', name:'Step-up onto the bench', sets:3, reps:'10–12 / side', type:'w', rest:90, start:'Bodyweight — then one 10 kg dumbbell held at the chest. Bench flat and locked',
-          muscles:'Glutes & thighs — great for the lower glute',
-          cues:['Whole foot on the bench, not just the toes','Stand up by pushing through the TOP heel — don’t jump off the floor foot','Stand tall at the top, then lower yourself slowly, 3 seconds','Check the bench is locked flat and stable every time'],
-          mistakes:['Bouncing off the bottom foot','A wobbly or unlocked bench'] },
+        { slug:'hw-donkey-kick', name:'Donkey kicks', sets:3, reps:'15–20 / side', type:'r', rest:60, start:'Bodyweight on the floor — squeeze hard at the top of every rep',
+          muscles:'Glutes — a floor classic that hits the whole glute, no bench needed',
+          cues:['On all fours, hands under shoulders, knees under hips','Keeping the knee bent at 90°, kick the heel up toward the ceiling','Stop when the thigh is level with the body and SQUEEZE for 2 seconds','Lower slowly without the knee touching the floor. Hips stay square — no twisting'],
+          mistakes:['Arching the lower back to kick higher — the squeeze matters, not the height','Fast swinging reps'] },
         { slug:'hw-reverse-lunge', name:'Reverse lunge', sets:3, reps:'10–12 / side', type:'w', rest:90, start:'Bodyweight first — then one 10 kg dumbbell held at the chest',
           muscles:'Glutes & quads, one leg at a time — great for the lower glute',
           cues:['Step BACK, not forward — much easier on the knees','Front heel carries the weight; front shin stays fairly vertical','Lean the chest slightly forward to load the glute','Push through the front heel to stand; all reps one side, then swap'],
@@ -720,13 +721,13 @@ const VIDEOS = {
   'incline-walk':    {id:'Q6eCpcNsmC0', title:'12-3-30 Treadmill Workout Review', channel:'The Red Delta Project'},
   /* ---- home program (all verified 30 July 2026) ---- */
   'hw-hip-thrust':   {id:'4hYRM_60BD4', title:'How To Barbell Hip Thrust — Coach Kelly Cues', channel:'Kelly Matthews'},
-  'hw-one-arm-row':  {id:'pYcpY20QaE8', title:'How To: Single-Arm Dumbbell Row', channel:'ScottHermanFitness'},
+  'hw-db-row':       {id:'gfUg6qWohTk', title:'Dumbbell Rows — Proper Form', channel:'ATHLEAN-X'},
   'hw-plank':        {id:'kL_NJAkCQBg', title:'Mastering the Plank in 2 Minutes', channel:'Calisthenicmovement'},
   'hw-lateral-raise':{id:'3VcKaXpzqRo', title:'How To: Dumbbell Side Lateral Raise', channel:'ScottHermanFitness'},
   'hw-rear-delt':    {id:'4Xr7bKE_fxE', title:'Bent-Over Reverse Flys — Exercise Tutorial', channel:'Buff Dudes'},
   'hw-dead-bug':     {id:'cnBYCszEoWQ', title:'Dead Bug Exercises', channel:'Bob & Brad'},
   'hw-bb-rdl':       {id:'5bJEigM5iVg', title:'Fix Your RDL Form — Romanian Deadlift Tutorial', channel:'Squat University'},
-  'hw-step-up':      {id:'tqECKZxlCKE', title:'Step-Ups — Master Proper Form', channel:'Overtime Athletes'},
+  'hw-donkey-kick':  {id:'QreOl2tgC-8', title:'How To Do a Donkey Kick — The Right Way', channel:'Well+Good'},
   'hw-reverse-lunge':{id:'UeSqJlXDn8M', title:'Reverse Lunges for Glutes — Form and Tips', channel:'Hypertrophy Coach'},
   'hw-frog-pumps':   {id:'HyCiZVMMDW4', title:'Frog Pumps — Glute Activation Drill', channel:'Bret Contreras (Glute Guy)'},
   'hw-side-plank':   {id:'XeN4pEZZJNI', title:'How To Do a Side Plank the Right Way', channel:'Well+Good'},
@@ -1036,6 +1037,7 @@ function homeGuideCard(){
     '<p class="kit">Adjustable bench (flat / incline / decline) · barbell · two 15&nbsp;kg and two 20&nbsp;kg plates · two 10&nbsp;kg dumbbells. That covers everything in this plan — the hip thrust, the best glute exercise there is, needs exactly a bench and a barbell.</p>'+
     '<h3>Hip thrust set-up (read once)</h3>'+
     '<ol class="steps">'+
+    '<li><b>Wedge the bench lengthways against a wall</b> so it cannot slide backwards. The bench is not fixed to the floor — this step is not optional.</li>'+
     '<li>Sit on the floor, upper back against the long side of the bench, legs straight out.</li>'+
     '<li>Roll the bar up over your thighs into the crease of your hips. If it won’t roll over the thighs, rest it on a plate first so it starts higher.</li>'+
     '<li><b>Always pad the bar</b> — folded towel or yoga mat. This is non-negotiable for comfort.</li>'+
@@ -1054,7 +1056,8 @@ function homeGuideCard(){
     '<div class="warnbox"><p><b>Safety — read once, then stop worrying</b></p><ul class="plainlist">'+
     '<li><b>Never put a barbell on your back or over your face at home</b> — no squats or bench presses with the bar. There is no rack to catch it. Every barbell lift in this plan keeps the bar at hip height or in your hands.</li>'+
     '<li>Leave 2–3 reps in the tank on every barbell set. No maximum attempts while training alone.</li>'+
-    '<li>Check the bench is locked flat before step-ups and squats to the bench.</li>'+
+    '<li><b>The bench is not fixed to the floor — only lie or sit on it, never stand on it.</b> For hip thrusts, wall-brace it first (step 1 above). If it ever slides or wobbles during an exercise, stop and do the floor version instead.</li>'+
+    '<li>Check the bench is locked flat before squatting down to it.</li>'+
     '<li>Sharp joint pain = stop that exercise for the day. Muscle soreness for a day or two afterwards is normal and good.</li>'+
     '</ul></div>'+
     '<h3>How hard should a set feel?</h3>'+
