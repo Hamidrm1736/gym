@@ -237,6 +237,22 @@ textarea.json{width:100%; min-height:150px; font-family:ui-monospace,Consolas,mo
 #modalBtns{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end}
 .note-med{border-left:3px solid var(--series-2)}
 .remind{border-left:3px solid var(--series-2)}
+/* home guide (collapsible) */
+details.guide summary{font-weight:700; font-size:1.05rem; cursor:pointer; list-style:none}
+details.guide summary::-webkit-details-marker{display:none}
+details.guide summary::after{content:" ▾"; color:var(--muted); font-weight:400}
+details.guide[open] summary::after{content:" ▴"}
+details.guide .gbody{margin-top:10px}
+details.guide h3{margin:14px 0 4px}
+.kit{font-size:.9rem; color:var(--ink-2)}
+.plates{width:100%; border-collapse:collapse; font-size:.88rem; margin-top:6px}
+.plates th{text-align:left; font-size:.76rem; color:var(--muted); font-weight:600; padding:6px 8px; border-bottom:1px solid var(--grid)}
+.plates td{padding:7px 8px; border-bottom:1px solid var(--hairline); color:var(--ink-2); font-variant-numeric:tabular-nums}
+.plates td:first-child{color:var(--ink); font-weight:600}
+.warnbox{border-left:3px solid var(--bad); background:var(--surface-2); border-radius:8px; padding:10px 12px; margin-top:10px}
+.warnbox p{font-size:.88rem}
+ol.steps{padding-left:22px; margin-top:4px}
+ol.steps li{padding:3px 0; color:var(--ink-2); font-size:.9rem}
 /* iPhone home-screen app: respect the notch and the home indicator */
 header.app{padding-top:env(safe-area-inset-top,0px)}
 body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
@@ -276,6 +292,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <h2>How this plan works</h2>
       <ul class="plainlist">
         <li>Train <b>3 days a week</b> (for example Mon / Wed / Fri) — any days you like, just not back-to-back.</li>
+        <li><b>Two versions, one plan:</b> in the Workout tab tap <b>🏋️ Gym</b> or <b>🏠 Home</b>. The home version uses your bench, barbell, plates and dumbbells and chases the same result — use whichever suits the day.</li>
         <li>Style: moderate weights, 10–15 reps, stop 1–2 reps before failure. This builds a <b>lean, defined shape — not bulk</b>.</li>
         <li>Muscle grows slowly — you will look "toned" long before you could ever look "too big".</li>
         <li>Fat loss happens in the <b>Meal Plan</b> tab. The gym shapes the muscle; food removes the layer over it.</li>
@@ -287,6 +304,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 
   <!-- ============ WORKOUT ============ -->
   <section class="view" id="view-workout">
+    <div class="seg" id="locSeg" style="margin-bottom:8px"></div>
     <div class="seg" id="daySeg"></div>
     <div id="workoutMeta"></div>
     <div id="exerciseList"></div>
@@ -445,7 +463,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.3 · 30 July 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.4 · 30 July 2026</p>
   </section>
 
 </main>
@@ -459,7 +477,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 /* =====================================================================
    DATA — 3-day program (lean & defined, not bulky) + 7-day meal plan
    ===================================================================== */
-const PROGRAM = {
+const GYM_PROGRAM = {
   order: ['A','B','C'],
   days: {
     A: { title:'Day A — Chest & full body', focus:'Chest focus',
@@ -573,6 +591,129 @@ const PROGRAM = {
   }
 };
 
+/* ---------------------------------------------------------------
+   HOME PROGRAM — adjustable bench · barbell · 2×15 kg + 2×20 kg
+   plates · 2×10 kg hex dumbbells. Same goal as the gym plan.
+   --------------------------------------------------------------- */
+const HOME_PROGRAM = {
+  order: ['1','2','3'],
+  days: {
+    '1': { title:'Home 1 — Chest & full body', focus:'Chest focus',
+      warmup:'5 min brisk walk or marching on the spot + 20 arm circles each way + 10 slow bodyweight squats. Then 8 easy knee push-ups before the real sets. No long stretching before lifting — save that for after.',
+      exercises:[
+        { slug:'h-pushup', name:'Push-ups', sets:3, reps:'8–15', type:'r', rest:90, start:'Flat floor first. Over 15 reps? Feet up on the bench. Over 15 again? 15 kg plate in a backpack',
+          muscles:'Chest, front shoulders, core — the king of home chest moves',
+          cues:['Hands a little wider than the shoulders, body one straight line — squeeze the glutes','Chest down to a fist above the floor, then push the floor away','Squeeze the chest at the top of every rep','Progression path: flat → feet on the bench → backpack with the 15 kg plate inside. Feet-up push-ups already press about 70% of your bodyweight — more than your 50 kg gym bench'],
+          mistakes:['Hips sagging or sticking up','Half reps — full range is what grows the chest'] },
+        { slug:'h-incline-db-press', name:'Incline dumbbell press', sets:3, reps:'12–20', type:'w', rest:90, start:'10 kg dumbbells · bench at 30–45° · 3 seconds down',
+          muscles:'Upper chest — fills out the top of the chest',
+          cues:['Bench at 30–45°, feet flat on the floor','Lower slowly to chest level, elbows about 45° from your body','Press up and slightly inward, squeeze at the top','Light dumbbells only work if the last 2 reps feel genuinely hard — 20 slow reps is a real set'],
+          mistakes:['Bench too steep — it becomes a shoulder press','Fast bouncy reps — slow control is the whole point with light weights'] },
+        { slug:'h-db-flye', name:'Dumbbell flye on the bench', sets:2, reps:'12–15', type:'w', rest:60, start:'10 kg dumbbells — slow, and stop the stretch where comfortable',
+          muscles:'Chest — shapes the line across the chest',
+          cues:['Soft bend in the elbows, keep it the whole set','Open wide like hugging a barrel, then bring the dumbbells together over the chest','Squeeze 1 second at the top','Too heavy at the bottom? Shorten the range — never force the stretch'],
+          mistakes:['Bending the elbows more and turning it into a press','Dropping the arms too far back'] },
+        { slug:'h-one-arm-row', name:'One-arm dumbbell row on the bench', sets:3, reps:'15–20 / side', type:'w', rest:90, start:'10 kg — 3 seconds down, 1 second squeeze at the top',
+          muscles:'Lats, mid-back — posture and the V-shape',
+          cues:['One hand and knee on the bench, back flat','Pull the dumbbell to your hip pocket, not your chest','Elbow close to the body; hold the squeeze a full second','Outgrown 10 kg? Hold BOTH dumbbells in one hand (20 kg), or row a loaded backpack'],
+          mistakes:['Twisting the torso to lift more','Yanking with the biceps only'] },
+        { slug:'h-lateral-raise', name:'Seated lateral raise (bent arms)', sets:3, reps:'10–15', type:'w', rest:60, start:'10 kg dumbbells with elbows bent 90° — bending the arms roughly halves how heavy they feel',
+          muscles:'Side shoulders — the width that makes the waist look smaller',
+          cues:['Sit upright on the bench so the legs cannot help','Elbows bent to about 90° and kept there — that is the trick that makes 10 kg workable','Raise to shoulder height only, leading with the elbows','Lower over 3 seconds. Still too heavy? Grip the inside end of the dumbbell, or do one arm at a time lying on your side'],
+          mistakes:['Straightening the arms — instantly doubles the weight','Shrugging or swinging the body'] },
+        { slug:'h-goblet', name:'Goblet squat', sets:3, reps:'15–20', type:'w', rest:90, start:'One 10 kg dumbbell at the chest — 3 seconds down every rep',
+          muscles:'Quads, glutes, core',
+          cues:['Hold the dumbbell vertically against your chest','Sit down between the heels, chest tall','As deep as comfortable with heels down','Light weight, so tempo is the difficulty: 3 seconds down, drive up strong'],
+          mistakes:['Heels lifting off the floor','Knees caving inward'] },
+        { slug:'h-decline-situp', name:'Decline sit-up on the bench', sets:2, reps:'10–15', type:'r', rest:60, start:'Bodyweight — gentle decline angle, hands on your chest',
+          muscles:'Abs — the bench makes them work harder than floor crunches',
+          cues:['Feet hooked in the pads, gentle decline to start','Curl up by rounding the spine — ribs toward hips','Lower slowly, 3 seconds down','Steeper angle = harder. Only then hold a dumbbell at the chest'],
+          mistakes:['Pulling on the neck','Dropping down fast and bouncing'] },
+        { slug:'h-plank', name:'Plank', sets:2, reps:'30–45 sec', type:'t', rest:60, start:'Bodyweight — hold 30 s',
+          muscles:'Deep core — flattens and tightens the tummy wall',
+          cues:['Elbows under shoulders, body one straight line','Squeeze the glutes, tuck the tailbone slightly','Keep breathing — don’t hold your breath'],
+          mistakes:['Hips sagging down or lifting too high','Letting the head drop'] },
+        { slug:'h-walk', name:'Brisk walk outside (finisher)', sets:1, reps:'10–15 min', type:'m', rest:0, start:'10–15 min easy — your longer walks belong on rest days, see the guide', novid:true,
+          muscles:'Fat-burning finisher — replaces the treadmill',
+          cues:['Steady, purposeful pace out the front door','Hills or stairs are your incline setting'],
+          mistakes:['Strolling slowly — it should feel like going somewhere'] }
+      ]},
+    '2': { title:'Home 2 — Back & shoulders', focus:'Pull day',
+      warmup:'5 min brisk walk or marching + 20 arm circles + 15 arm swings across the chest. Then ramp the row: empty bar × 10, then your working weight × 3 easy reps.',
+      exercises:[
+        { slug:'h-bb-row', name:'Barbell bent-over row', sets:4, reps:'8–10', type:'w', rest:120, start:'Bar + one 15 kg plate each side (≈50 kg)',
+          muscles:'Whole back — the width that makes your waist look smaller',
+          cues:['Feet hip-width, hinge forward to about 45°, knees slightly bent','Back flat and braced the whole set','Pull the bar to your belly button, squeeze the shoulder blades 1 second','Lower back getting tired first? Do the easy version: lie chest-down on the incline bench and row the dumbbells instead'],
+          mistakes:['Standing up a little each rep to heave the bar','Rounding the lower back — lighten the bar instead'] },
+        { slug:'h-db-shoulder-press', name:'Seated dumbbell shoulder press', sets:3, reps:'10–15', type:'w', rest:90, start:'10 kg dumbbells — the same exercise and weight as your gym day',
+          muscles:'Shoulders, triceps',
+          cues:['Bench back set upright, back supported','Dumbbells start at ear height','Press up until the arms are straight (not locked hard)','Lower slowly back to the ears — 3 seconds down makes 10 kg honest work'],
+          mistakes:['Arching the lower back off the pad','Dropping the weights fast'] },
+        { slug:'h-lateral-raise', name:'Seated lateral raise (bent arms)', sets:3, reps:'10–15', type:'w', rest:60, start:'10 kg dumbbells with elbows bent 90°',
+          muscles:'Side shoulders — second dose of the week',
+          cues:['Sit upright, elbows bent about 90° the whole set','Raise to shoulder height only, leading with the elbows','Lower over 3 seconds'],
+          mistakes:['Straightening the arms','Swinging the body'] },
+        { slug:'h-rear-delt', name:'Rear-delt raise (chest on the incline bench)', sets:2, reps:'15–20', type:'w', rest:60, start:'Start with NO weight, or a tin in each hand — 10 kg is almost always too heavy here',
+          muscles:'Rear shoulders — fixes posture, balances the pressing',
+          cues:['Low incline, lie face-down with the chest supported','Arms hanging, slight elbow bend','Raise out wide, squeeze the shoulder blades','3 seconds down'],
+          mistakes:['Turning it into a row by pulling the elbows back','Swinging the weights up'] },
+        { slug:'h-bb-rdl', name:'Barbell Romanian deadlift', sets:3, reps:'10–12', type:'w', rest:120, start:'Bar + one 15 kg plate each side (≈50 kg)',
+          muscles:'Hamstrings, glutes, whole back — the best-value lift you own',
+          cues:['Bar at the thighs, knees soft','Push the hips BACK and slide the bar down the thighs — a hinge, not a squat','Back flat; stop at a strong stretch behind the legs (about knee height)','Drive the hips forward and squeeze the glutes to stand'],
+          mistakes:['Rounding the lower back — lighten the bar immediately','Bending the knees and turning it into a squat'] },
+        { slug:'h-leg-raise', name:'Reverse crunch', sets:3, reps:'12–15', type:'r', rest:60, start:'Bodyweight — on the floor or along the bench',
+          muscles:'Lower abs',
+          cues:['On your back, hands beside the hips','Curl the knees up AND lift the hips slightly — the hip lift is the exercise','Lower slowly; the feet hover, never rest','Lower back stays pressed down'],
+          mistakes:['Swinging the legs with momentum','Only moving the legs without curling the pelvis'] },
+        { slug:'h-side-plank', name:'Side plank', sets:2, reps:'20–30 sec / side', type:'t', rest:60, start:'Bodyweight — knees-down version is fine',
+          muscles:'Obliques — tightens the sides of the waist',
+          cues:['Elbow under the shoulder, body one straight line','Push the hips up and slightly forward','Keep breathing; then swap sides'],
+          mistakes:['Hips dropping toward the floor','Rolling the chest forward'] },
+        { slug:'h-walk', name:'Brisk walk outside (finisher)', sets:1, reps:'10–15 min', type:'m', rest:0, start:'10–15 min easy — your longer walks belong on rest days, see the guide', novid:true,
+          muscles:'Fat-burning finisher — replaces the treadmill',
+          cues:['Steady, purposeful pace out the front door','Hills or stairs are your incline setting'],
+          mistakes:['Strolling slowly — it should feel like going somewhere'] }
+      ]},
+    '3': { title:'Home 3 — Legs, core & chest pump', focus:'Legs & glutes focus',
+      warmup:'5 min brisk walk + 15 glute bridges, 10 bodyweight squats and 10 hip hinges with no weight. Then one bar-only set of hip thrusts.',
+      exercises:[
+        { slug:'h-hip-thrust', name:'Barbell hip thrust (back on the bench)', sets:3, reps:'10–12', type:'w', rest:120, start:'Bar + one 20 kg plate each side (≈60 kg) — you will get strong at this fast',
+          muscles:'Glutes and hamstrings — the one lower-body lift you can safely load really heavy at home',
+          cues:['Sit on the floor with your upper back against the bench, legs straight, and roll the bar up over your thighs until it sits in the crease of your hips',
+                'ALWAYS pad the bar with a folded towel or mat — bare steel at 60 kg genuinely hurts',
+                'Drive through the heels, squeeze the glutes hard at the top, chin tucked and ribs down — the lower back must not arch',
+                'Setup feels awkward? Do a barbell glute bridge flat on the floor instead — same muscles, simpler set-up'],
+          mistakes:['Arching the lower back at the top instead of squeezing the glutes','Feet too far forward — that turns it into a hamstring lift'] },
+        { slug:'h-reverse-lunge', name:'Dumbbell reverse lunge', sets:3, reps:'10–12 / side', type:'w', rest:90, start:'Bodyweight first session — then the 10 kg dumbbells',
+          muscles:'Quads & glutes, one leg at a time',
+          cues:['Step BACK, not forward — far easier on the knees and balance','Front heel carries the weight; push through it to stand','Chest slightly forward','All reps one side then swap. Wobbly? Hold the bench with one hand until the balance comes'],
+          mistakes:['Pushing off the back foot instead of the front heel','Letting the back knee crash down — touch it softly'] },
+        { slug:'h-step-up', name:'Dumbbell step-up onto the bench', sets:2, reps:'10–12 / side', type:'w', rest:90, start:'10 kg dumbbells — bench flat and locked at its lowest height',
+          muscles:'Glutes, quads and balance',
+          cues:['Whole foot on the bench','Push through the top foot — no push-off from the floor foot','Stand tall at the top, then lower slowly','Check the bench is locked before you start'],
+          mistakes:['Bouncing off the bottom foot','A wobbly unlocked bench — check every time'] },
+        { slug:'h-pushup', name:'Push-ups (chest pump)', sets:3, reps:'as many as you can', type:'r', rest:60, start:'Bodyweight — flat or knees-down, chase the burn',
+          muscles:'Chest, triceps, core — the week’s third chest hit',
+          cues:['Same form as Home 1','Stop 1 rep before the arms give out','Feet up on the bench if flat has become too easy'],
+          mistakes:['Hips sagging','Racing through half reps'] },
+        { slug:'h-bicycle-crunch', name:'Bicycle crunch', sets:3, reps:'15–20', type:'r', rest:60, start:'Bodyweight — slow, controlled',
+          muscles:'Abs & obliques',
+          cues:['Hands lightly behind the head, shoulder blades off the floor','Slow: elbow toward the opposite knee while the other leg extends','Rotate through the ribs, not the neck'],
+          mistakes:['Pulling on the neck','Racing through the reps'] },
+        { slug:'h-dead-bug', name:'Dead bug', sets:2, reps:'10 / side', type:'r', rest:60, start:'Bodyweight — slow and controlled',
+          muscles:'Deep core — trains the tummy to stay flat',
+          cues:['On your back, arms up, knees bent 90°','Press the lower back into the floor and keep it there','Breathe out as the opposite arm and leg lower','Slow and controlled, alternate sides'],
+          mistakes:['Lower back arching off the floor','Moving both legs at once'] },
+        { slug:'h-walk', name:'Brisk walk outside (finisher)', sets:1, reps:'10–15 min', type:'m', rest:0, start:'10–15 min easy — your longer walks belong on rest days, see the guide', novid:true,
+          muscles:'Fat-burning finisher — replaces the treadmill',
+          cues:['Steady, purposeful pace out the front door','Hills or stairs are your incline setting'],
+          mistakes:['Strolling slowly — it should feel like going somewhere'] }
+      ]}
+  }
+};
+
+const PROGRAMS = { gym: GYM_PROGRAM, home: HOME_PROGRAM };
+
 /* Verified YouTube form videos (ID + attribution) */
 const VIDEOS = {
   'incline-db-press':      {id:'8iPEnn-ltC8', title:'How To: Dumbbell Incline Chest Press', channel:'ScottHermanFitness'},
@@ -596,7 +737,31 @@ const VIDEOS = {
   'leg-curl':              {id:'ELOCsoDSmrg', title:'How To: Seated Leg Curl', channel:'ScottHermanFitness'},
   'bicycle-crunch':        {id:'PAEo-zRSanM', title:'Bicycle Crunches for Beginners — Proper Form', channel:'Fit Father Project'},
   'dead-bug':              {id:'cnBYCszEoWQ', title:'Dead Bug Exercises', channel:'Bob & Brad'},
-  'incline-walk':          {id:'Q6eCpcNsmC0', title:'12-3-30 Treadmill Workout Review', channel:'The Red Delta Project'}
+  'incline-walk':          {id:'Q6eCpcNsmC0', title:'12-3-30 Treadmill Workout Review', channel:'The Red Delta Project'},
+  /* ---- home program (all verified 30 July 2026) ---- */
+  'h-floor-press':      {id:'vAFw7EPL4eM', title:'Barbell Floor Press — Exercise Tutorial', channel:'Buff Dudes'},
+  'h-incline-db-press': {id:'8iPEnn-ltC8', title:'How To: Dumbbell Incline Chest Press', channel:'ScottHermanFitness'},
+  'h-db-flye':          {id:'eozdVDA78K0', title:'How To: Dumbbell Flys On A Bench', channel:'ScottHermanFitness'},
+  'h-decline-pushup':   {id:'SKPab2YC8BE', title:'How To: Decline Push-Up (feet raised)', channel:'ScottHermanFitness'},
+  'h-decline-situp':    {id:'QhGU5cmNZds', title:'How To: Decline Sit-Up', channel:'ScottHermanFitness'},
+  'h-plank':            {id:'kL_NJAkCQBg', title:'Mastering the Plank in 2 Minutes', channel:'Calisthenicmovement'},
+  'h-bb-row':           {id:'YcK7pyFXmWk', title:'How To Barbell Bent-Over Row Properly', channel:'Fit Father Project'},
+  'h-bb-ohp':           {id:'eNFXEEdfQp4', title:'How To Press (Overhead Press)', channel:'Alan Thrall'},
+  'h-one-arm-row':      {id:'pYcpY20QaE8', title:'How To: Single-Arm Dumbbell Row', channel:'ScottHermanFitness'},
+  'h-lateral-raise':    {id:'3VcKaXpzqRo', title:'How To: Dumbbell Side Lateral Raise', channel:'ScottHermanFitness'},
+  'h-rear-delt':        {id:'4Xr7bKE_fxE', title:'Bent-Over Reverse Flys — Exercise Tutorial', channel:'Buff Dudes'},
+  'h-leg-raise':        {id:'fhrkw1aaP8k', title:'Reverse Crunch — Lower Ab Mistakes to Avoid', channel:'ATHLEAN-X'},
+  'h-bb-rdl':           {id:'5bJEigM5iVg', title:'Fix Your RDL Form — Romanian Deadlift Tutorial', channel:'Squat University'},
+  'h-bulgarian':        {id:'hPlKPjohFS0', title:'The Perfect Bulgarian Split Squat', channel:'Squat University'},
+  'h-step-up':          {id:'tqECKZxlCKE', title:'Dumbbell Step-Ups — Master Proper Form', channel:'Overtime Athletes'},
+  'h-hip-thrust':       {id:'4hYRM_60BD4', title:'How To Barbell Hip Thrust', channel:'Kelly Matthews'},
+  'h-pushup':           {id:'IODxDxX7oi4', title:'The Perfect Push Up — Do It Right', channel:'Calisthenicmovement'},
+  'h-dead-bug':         {id:'cnBYCszEoWQ', title:'Dead Bug Exercises', channel:'Bob & Brad'},
+  'h-db-shoulder-press':{id:'qEwKCR5JCog', title:'How To: Dumbbell Shoulder Press', channel:'ScottHermanFitness'},
+  'h-goblet':           {id:'MxsFDhcyFyE', title:'How To Perform Goblet Squats', channel:'Buff Dudes'},
+  'h-reverse-lunge':    {id:'UeSqJlXDn8M', title:'Reverse Lunges — Form and Tips', channel:'Hypertrophy Coach'},
+  'h-bicycle-crunch':   {id:'PAEo-zRSanM', title:'Bicycle Crunches — Proper Form', channel:'Fit Father Project'},
+  'h-side-plank':       {id:'XeN4pEZZJNI', title:'How To Do a Side Plank the Right Way', channel:'Well+Good'}
 };
 
 const MEALS = [
@@ -655,7 +820,7 @@ const SHOPPING = {
    APP LOGIC
    ===================================================================== */
 const STORE_KEY = 'gymTrackerData';
-const DEFAULT_STATE = { version:1, settings:{theme:'dark', startDate:'', startWeightKg:0}, sessions:{}, measurements:[], mealEdits:{}, shopping:{} };
+const DEFAULT_STATE = { version:1, settings:{theme:'dark', startDate:'', startWeightKg:0, location:'gym'}, sessions:{}, measurements:[], mealEdits:{}, shopping:{} };
 
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
@@ -681,6 +846,7 @@ function normalize(s){
   out.measurements = Array.isArray(s.measurements) ? s.measurements : [];
   out.mealEdits = (s.mealEdits && typeof s.mealEdits==='object') ? s.mealEdits : {};
   out.shopping = (s.shopping && typeof s.shopping==='object') ? s.shopping : {};
+  out.settings.location = out.settings.location==='home' ? 'home' : 'gym';
   out.version = 1;
   return out;
 }
@@ -720,21 +886,32 @@ function switchView(name){
 
 /* ---------- workout ---------- */
 let currentDay = 'A';
+let currentLoc = 'gym';
+/* current program (gym or home) + small label helpers */
+const P = () => PROGRAMS[currentLoc] || PROGRAMS.gym;
+const locOf = s => (s && s.loc === 'home') ? 'home' : 'gym';   /* older sessions had no loc → gym */
+function dayName(loc, key){ return (loc === 'home' ? 'Home ' : 'Day ') + key; }
+function exDefFor(loc, dayKey, slug){
+  const day = (PROGRAMS[loc] || PROGRAMS.gym).days[dayKey];
+  return day ? day.exercises.find(e => e.slug === slug) : null;
+}
 function sessionHasData(sess){
   if(!sess||!sess.ex) return false;
   return Object.values(sess.ex).some(e => (e.sets||[]).some(st => Object.values(st||{}).some(v=>v!=='' && v!=null)));
 }
 function loggedDates(){ return Object.keys(state.sessions).filter(d=>sessionHasData(state.sessions[d])||state.sessions[d].done).sort(); }
 function suggestNextDay(){
-  const ds=loggedDates();
-  if(!ds.length) return 'A';
-  const last=state.sessions[ds[ds.length-1]].day||'A';
-  const i=PROGRAM.order.indexOf(last);
-  return PROGRAM.order[(i+1)%PROGRAM.order.length];
+  const ord=P().order;
+  /* rotate within the place you are training — gym and home keep their own order */
+  const ds=loggedDates().filter(d=>locOf(state.sessions[d])===currentLoc);
+  if(!ds.length) return ord[0];
+  const last=state.sessions[ds[ds.length-1]].day;
+  const i=ord.indexOf(last);
+  return ord[(i+1)%ord.length];
 }
 function todaySession(create){
   const k=todayYmd();
-  if(!state.sessions[k] && create) state.sessions[k]={day:currentDay, ex:{}, done:false};
+  if(!state.sessions[k] && create) state.sessions[k]={day:currentDay, loc:currentLoc, ex:{}, done:false};
   return state.sessions[k];
 }
 function prevExData(slug){
@@ -753,6 +930,7 @@ function setSummary(exDef, sets){
     if(exDef.type==='r')  return (st.reps??'')!=='' ? `${st.reps}` : null;
     if(exDef.type==='t')  return (st.sec??'')!=='' ? `${st.sec}s` : null;
     if(exDef.type==='c')  return (st.min??'')!=='' ? `${st.min}min${st.inc?' @'+st.inc+'%':''}${st.spd?' '+st.spd+'km/h':''}` : null;
+    if(exDef.type==='m')  return (st.min??'')!=='' ? `${st.min} min` : null;
     return null;
   }).filter(Boolean);
   return parts.join(' · ');
@@ -761,22 +939,42 @@ const FIELD_DEFS = {
   w:[{f:'kg',   ph:'kg',  step:'0.5', suf:''},   {f:'reps', ph:'reps', step:'1', suf:''}],
   r:[{f:'reps', ph:'reps', step:'1', suf:'reps'}],
   t:[{f:'sec',  ph:'sec', step:'5', suf:'sec'}],
-  c:[{f:'min',  ph:'min', step:'1', suf:'min'}, {f:'inc', ph:'%', step:'0.5', suf:'%'}, {f:'spd', ph:'km/h', step:'0.1', suf:'km/h'}]
+  c:[{f:'min',  ph:'min', step:'1', suf:'min'}, {f:'inc', ph:'%', step:'0.5', suf:'%'}, {f:'spd', ph:'km/h', step:'0.1', suf:'km/h'}],
+  m:[{f:'min',  ph:'min', step:'1', suf:'min'}]
 };
+function renderLocSeg(){
+  const seg=$('#locSeg'); seg.textContent='';
+  [['gym','🏋️ Gym'],['home','🏠 Home']].forEach(([l,label])=>{
+    const b=el('button', l===currentLoc?'active':'', label);
+    b.addEventListener('click', ()=>{
+      if(currentLoc===l) return;
+      currentLoc=l;
+      state.settings.location=l; save();
+      const s=todaySession(false);
+      if(s && !sessionHasData(s) && !s.done){ s.loc=l; save(); }
+      currentDay=(s && locOf(s)===l && s.day) ? s.day : suggestNextDay();
+      renderLocSeg(); renderDaySeg(); renderWorkout(); renderDashboard();
+    });
+    seg.appendChild(b);
+  });
+}
 function renderDaySeg(){
   const seg=$('#daySeg'); seg.textContent='';
-  PROGRAM.order.forEach(d=>{
+  P().order.forEach(d=>{
     const b=el('button', d===currentDay?'active':'', 'Day '+d);
     b.addEventListener('click', ()=>{
       currentDay=d;
-      const s=todaySession(false); if(s) { s.day=d; save(); }
+      /* don't relabel a session that already has numbers in it */
+      const s=todaySession(false);
+      if(s && !sessionHasData(s) && !s.done){ s.day=d; s.loc=currentLoc; save(); }
       renderDaySeg(); renderWorkout();
     });
     seg.appendChild(b);
   });
 }
 function renderWorkout(){
-  const day=PROGRAM.days[currentDay];
+  if(!P().days[currentDay]) currentDay=P().order[0];
+  const day=P().days[currentDay];
   const meta=$('#workoutMeta'); meta.textContent='';
   const mc=el('div','card');
   const top=el('div','spread');
@@ -790,6 +988,7 @@ function renderWorkout(){
   const pf=el('p','small'); pf.textContent='Sets are pre-filled with your last numbers (shown dimmed). Edit a number only when it changes — ticking done or finishing saves them, and next time starts from your new numbers.'; pf.style.marginTop='6px';
   mc.appendChild(pf);
   meta.appendChild(mc);
+  if(currentLoc==='home') meta.appendChild(homeGuideCard());
 
   const list=$('#exerciseList'); list.textContent='';
   const sess=todaySession(false);
@@ -819,7 +1018,7 @@ function renderWorkout(){
     }
 
     const foot=el('div','exfoot');
-    if(ex.type!=='c'){
+    if(ex.type!=='c' && ex.type!=='m'){
       const addB=el('button','btn ghost sm','＋ set');
       addB.addEventListener('click', ()=>{
         commitExercise(ex, card);
@@ -855,15 +1054,86 @@ function renderWorkout(){
   });
   renderHistory();
 }
+/* Collapsible guide, shown above the exercises on home days */
+function homeGuideCard(){
+  const d=document.createElement('details'); d.className='card guide';
+  const s=document.createElement('summary'); s.textContent='🏠 Home setup, safety & how to keep getting stronger';
+  d.appendChild(s);
+  const b=el('div','gbody');
+  b.innerHTML =
+    '<h3>Your kit</h3>'+
+    '<p class="kit">Adjustable bench (flat / incline / decline) · barbell · two 15&nbsp;kg and two 20&nbsp;kg plates · two 10&nbsp;kg hex dumbbells. That covers everything in this plan.</p>'+
+    '<h3>Plate maths</h3>'+
+    '<p class="small">Put your bar on the bathroom scales once and write the number down — long bars with spinning ends are usually 20&nbsp;kg, short thin ones about 10&nbsp;kg. Then read the matching column.</p>'+
+    '<table class="plates"><thead><tr><th>On the bar</th><th>20 kg bar</th><th>10 kg bar</th><th>Used for</th></tr></thead><tbody>'+
+    '<tr><td>Bar only</td><td>20 kg</td><td>10 kg</td><td>Warm-up sets</td></tr>'+
+    '<tr><td>One 15 kg per side</td><td>50 kg</td><td>40 kg</td><td>Rows · RDL</td></tr>'+
+    '<tr><td>One 20 kg per side</td><td>60 kg</td><td>50 kg</td><td>Hip thrust · next step up</td></tr>'+
+    '<tr><td>15 + 20 per side</td><td>90 kg</td><td>80 kg</td><td>Heavy hip thrusts &amp; RDLs later</td></tr>'+
+    '</tbody></table>'+
+    '<p class="small" style="margin-top:6px">Always load the <b>same plates on both sides</b> — never a 15 on one side and a 20 on the other.</p>'+
+    '<div class="warnbox"><p><b>Safety — read once, then stop worrying</b></p><ul class="plainlist">'+
+    '<li><b>Never barbell-bench-press on the bench.</b> With no rack and nobody home to help, a failed rep has nowhere to go — this plan builds your chest with push-ups and dumbbells instead. Want heavy barbell pressing anyway? Learn the <b>floor press</b>: lying on the floor, your arms touch down before the bar can trap you (<a href="https://www.youtube.com/watch?v=vAFw7EPL4eM" target="_blank" rel="noopener" style="color:var(--accent)">video</a>).</li>'+
+    '<li>Even if your bench <b>has</b> upright posts, the posts on a folding bench are not built for a 90&nbsp;kg bar. Floor press anyway.</li>'+
+    '<li><b>Never</b> a barbell <b>decline</b> press without a rack — head below your hips, feet hooked in, no way out. Use the decline setting for sit-ups only.</li>'+
+    '<li><b>Never</b> a barbell <b>back squat</b> without a rack — you cannot get it on your back safely or bail out. Your leg work here is hip thrusts, RDLs and split squats instead, and they are plenty.</li>'+
+    '<li><b>No max attempts, ever, while training alone.</b> Leave 2–3 reps in the tank on every barbell lift.</li>'+
+    '<li>Clips on the bar if you have them, and check the bench is locked before step-ups.</li>'+
+    '<li>Sharp joint pain = stop that exercise for the day. Muscle soreness for a day or two is normal and fine. Never train through pain at the chest scar — reduce the range and build back up.</li>'+
+    '</ul></div>'+
+    '<h3>How hard should each set feel?</h3>'+
+    '<p class="small">"Reps left in the tank" is the honest way to judge effort. Muscle grows when you finish close to your limit — but not at it.</p>'+
+    '<table class="plates"><thead><tr><th>Exercise type</th><th>First 3 weeks</th><th>After that</th></tr></thead><tbody>'+
+    '<tr><td>Barbell lifts</td><td>3–4 left</td><td>2–3 left (never 0 alone)</td></tr>'+
+    '<tr><td>Push-ups &amp; dumbbell presses</td><td>2–3 left</td><td>1–2 left</td></tr>'+
+    '<tr><td>Side raises, rear delts, core</td><td>1–2 left</td><td>0–1 left</td></tr>'+
+    '</tbody></table>'+
+    '<p class="small" style="margin-top:6px">This matters most for the <b>10 kg dumbbell work</b>: light weights only build muscle if you take the set close to the limit. A 20-rep set you stop early does almost nothing. Research puts anything from 5 to 30 reps in the useful range — so high reps are fine, they just have to be hard.</p>'+
+    '<h3>Getting stronger when you cannot add weight</h3>'+
+    '<p class="small">Your plate jumps are big (50 → 60 → 90&nbsp;kg) and the dumbbells are stuck at 10&nbsp;kg. Change <b>one</b> thing at a time, working down this list, so you always know what caused the progress:</p>'+
+    '<ol class="steps">'+
+    '<li><b>Add reps</b> — reach the top of the rep range on every set, then add the plate if one exists.</li>'+
+    '<li><b>Slow the lowering</b> — 3 then 4 seconds down. The best fix for the light dumbbells.</li>'+
+    '<li><b>Pause</b> 1–2 seconds at the bottom, where the muscle is stretched.</li>'+
+    '<li><b>Add a set</b> (every 2–3 weeks, not every week).</li>'+
+    '<li><b>1.5 reps</b> — a full rep, then a half rep from the bottom, counted as one. Feels ~40% heavier.</li>'+
+    '<li><b>One side at a time</b> — one-arm press, one-arm row, one leg. Half the weight, twice the work.</li>'+
+    '<li><b>Load a backpack</b> — the 15 kg plate in a backpack for push-ups, step-ups, split squats and sit-ups. Free, and it works immediately.</li>'+
+    '</ol>'+
+    '<p class="small">Cutting your rest short is <i>not</i> on this list — shorter rests actually gave less muscle growth in the research. Keep 2–3 min on the barbell lifts.</p>'+
+    '<h3>Your walking week</h3>'+
+    '<p class="small">Aim for about <b>150 minutes of brisk walking a week</b>, and 8,000–10,000 steps most days. The short walk at the end of each session is a warm-down — the real walking goes on your rest days, because hard cardio straight after lifting blunts the muscle you just trained for.</p>'+
+    '<ul class="plainlist">'+
+    '<li><b>Lifting days:</b> the 10–15 min walk at the end of the session.</li>'+
+    '<li><b>Rest days:</b> 40–50 min brisk walk. Hills or stairs instead of a treadmill incline.</li>'+
+    '<li><b>Never</b> a long hard walk on the same day as Home&nbsp;3 (legs).</li>'+
+    '<li>Skip sprints and HIIT for now — at 43 and eating in a deficit they cost more recovery than they are worth.</li>'+
+    '</ul>'+
+    '<h3>Your first three weeks</h3>'+
+    '<p class="small">Do the sets exactly as written — they are deliberately on the light side while your joints and tendons catch up. From about week 4, if you are recovering well, add <b>one set</b> to the chest and shoulder exercises every 2–3 weeks. If you feel wrecked instead, drop the flye and one push-up set. Coming back after a layoff, less is genuinely more for the first month.</p>'+
+    '<h3>Worth buying</h3>'+
+    '<p class="small"><b>First, measure the hole in one of your plates.</b> About 25&nbsp;mm (a bit bigger than a $2 coin) = standard. About 50&nbsp;mm = Olympic. Buying the wrong one is the classic mistake — it will not fit your bar.</p>'+
+    '<ul class="plainlist">'+
+    '<li><b>1. Four 2.5 kg plates — about $27 at Bunnings (CORTEX EnduraShell).</b> The single best thing you can buy. Right now your only steps are 50 → 60 → 90&nbsp;kg; with these you get 50 → 55 → 60 → 65 → 70&nbsp;kg, which is months of steady progress on the rows, RDLs and hip thrusts.</li>'+
+    '<li><b>2. A resistance band set — about $12 at Kmart.</b> Not just for warm-ups: you currently have <i>no way to pull downwards</i> at home, and that overhead pulling is what builds lat width. Hook a band over a door and you have lat pulldowns and face pulls.</li>'+
+    '<li><b>3. Adjustable dumbbells, 2 × 20–24 kg — $70 to $250.</b> The real fix for the dumbbell problem: light enough (2.5–5 kg) for proper side raises and rear delts, heavy enough (20 kg+) for real rows and incline presses. Buy this when the budget allows.</li>'+
+    '</ul>'+
+    '<p class="small">Do <b>not</b> buy a squat rack — this plan is built so you never need one.</p>'+
+    '<h3>Later on</h3>'+
+    '<p class="small">When RDLs feel easy at 90&nbsp;kg, add conventional <b>deadlifts</b> 3×6–8 on Home&nbsp;3 — <a href="https://www.youtube.com/watch?v=Y1IGeJEXpF4" target="_blank" rel="noopener" style="color:var(--accent)">form tutorial here</a>. And a reminder that beats any of this: the <b>flatter stomach comes from the Meal Plan tab</b>, not from sit-ups. Sit-ups build the muscle; the deficit uncovers it.</p>';
+  d.appendChild(b);
+  return d;
+}
 function ensureEx(exDef){
   const sess=todaySession(true);
-  sess.day=currentDay;
+  if(!sessionHasData(sess) && !sess.done){ sess.day=currentDay; sess.loc=currentLoc; }
+  else if(!sess.loc) sess.loc=currentLoc;
   if(!sess.ex[exDef.slug]) sess.ex[exDef.slug]={sets:Array.from({length:exDef.sets},()=>({})), note:'', done:false};
   return sess.ex[exDef.slug];
 }
 function buildSetRow(exDef, idx, exData, prev){
   const row=el('div','setrow');
-  row.appendChild(el('span','setno', exDef.type==='c' ? '—' : 'Set '+(idx+1)));
+  row.appendChild(el('span','setno', (exDef.type==='c'||exDef.type==='m') ? '—' : 'Set '+(idx+1)));
   const defs=FIELD_DEFS[exDef.type];
   defs.forEach((fd,fi)=>{
     if(fi>0 && exDef.type==='w') row.appendChild(el('span','x','×'));
@@ -912,7 +1182,7 @@ function renderHistory(){
     });
     const row=el('div','histrow');
     const l=el('div');
-    const hd=el('div','hd'); const tag=el('span','tagday','Day '+(s.day||'?')); hd.appendChild(tag); hd.appendChild(document.createTextNode(fmtLong(d)+(s.done?' ✓':'')));
+    const hd=el('div','hd'); const tag=el('span','tagday', (locOf(s)==='home'?'🏠 ':'🏋️ ')+dayName(locOf(s), s.day||'?')); hd.appendChild(tag); hd.appendChild(document.createTextNode(fmtLong(d)+(s.done?' ✓':'')));
     l.appendChild(hd);
     l.appendChild(el('div','hs', setCount+' sets logged'+(vol?' · '+Math.round(vol).toLocaleString()+' kg total volume':'')));
     row.appendChild(l);
@@ -928,8 +1198,11 @@ function renderHistory(){
 function renderLibrary(){
   const list=$('#libraryList'); list.textContent='';
   const seen=new Set();
-  PROGRAM.order.forEach(dk=>{
-    const day=PROGRAM.days[dk];
+  [['gym','🏋️ At the gym'],['home','🏠 At home']].forEach(([lk,ltitle])=>{
+   const ph=el('h2','',ltitle); ph.style.margin='22px 4px 2px';
+   list.appendChild(ph);
+   PROGRAMS[lk].order.forEach(dk=>{
+    const day=PROGRAMS[lk].days[dk];
     const hd=el('h3','', day.title); hd.style.margin='16px 4px 10px';
     list.appendChild(hd);
     day.exercises.forEach(ex=>{
@@ -959,7 +1232,7 @@ function renderLibrary(){
         const yl=el('a','', 'open on YouTube'); yl.href='https://www.youtube.com/watch?v='+v.id; yl.target='_blank'; yl.rel='noopener'; yl.style.color='var(--accent)';
         credit.appendChild(yl);
         card.appendChild(credit);
-      }else{
+      }else if(!ex.novid){
         box.appendChild(el('div','novid','No video yet — search YouTube: "'+ex.name+' proper form"'));
         card.appendChild(box);
       }
@@ -972,6 +1245,7 @@ function renderLibrary(){
       card.appendChild(ms);
       list.appendChild(card);
     });
+   });
   });
 }
 function flashLib(slug){
@@ -1266,22 +1540,31 @@ function renderDashboard(){
     tc.appendChild(el('p','','Recovery is where the muscle is built. Eat your protein, get your sleep, and come back for Day '+suggestNextDay()+'.'));
   }else if(sess && sessionHasData(sess)){
     tc.appendChild(el('h2','','Session in progress'));
-    tc.appendChild(el('div','hero-day','Day '+sess.day));
+    tc.appendChild(el('div','hero-day', (locOf(sess)==='home'?'🏠 ':'🏋️ ')+dayName(locOf(sess), sess.day)));
     const b=el('button','btn','Continue workout →');
-    b.addEventListener('click', ()=>{ currentDay=sess.day||currentDay; renderDaySeg(); renderWorkout(); switchView('workout'); });
+    b.addEventListener('click', ()=>{
+      currentLoc=locOf(sess); state.settings.location=currentLoc; save();
+      currentDay=sess.day||currentDay;
+      renderLocSeg(); renderDaySeg(); renderWorkout(); switchView('workout');
+    });
     tc.appendChild(b);
   }else{
     const nd=suggestNextDay();
-    const day=PROGRAM.days[nd];
-    tc.appendChild(el('h2','','Next up'));
+    const day=P().days[nd];
+    tc.appendChild(el('h2','','Next up · '+(currentLoc==='home'?'training at home':'at the gym')));
     tc.appendChild(el('div','hero-day',day.title));
     const ul=el('ul','plainlist');
     day.exercises.slice(0,4).forEach(e=>ul.appendChild(el('li','',e.name+' — '+e.sets+' × '+e.reps)));
-    ul.appendChild(el('li','','…and '+(day.exercises.length-4)+' more'));
+    if(day.exercises.length>4) ul.appendChild(el('li','','…and '+(day.exercises.length-4)+' more'));
     tc.appendChild(ul);
-    const b=el('button','btn','Start Day '+nd+' →'); b.style.marginTop='10px';
+    const b=el('button','btn','Start '+dayName(currentLoc,nd)+' →'); b.style.marginTop='10px';
     b.addEventListener('click', ()=>{ currentDay=nd; renderDaySeg(); renderWorkout(); switchView('workout'); });
     tc.appendChild(b);
+    const sw=el('p','small', currentLoc==='home'
+      ? 'Going to the gym instead? Tap 🏋️ Gym at the top of the Workout tab.'
+      : 'Training at home instead? Tap 🏠 Home at the top of the Workout tab.');
+    sw.style.marginTop='8px';
+    tc.appendChild(sw);
   }
 
   /* reminder cards */
@@ -1414,7 +1697,7 @@ function bindTimer(){
 }
 /* ---------- init ---------- */
 function renderAll(){
-  renderDashboard(); renderDaySeg(); renderWorkout(); renderLibrary(); renderMeals(); renderShopping(); renderProgress();
+  renderDashboard(); renderLocSeg(); renderDaySeg(); renderWorkout(); renderLibrary(); renderMeals(); renderShopping(); renderProgress();
 }
 function init(){
   applyTheme();
@@ -1436,10 +1719,11 @@ function init(){
   document.addEventListener('keydown', ev=>{ if(ev.key==='Escape') hideModal(); });
 
   const sess=state.sessions[todayYmd()];
+  currentLoc = sess ? locOf(sess) : (state.settings.location==='home' ? 'home' : 'gym');
   currentDay = (sess && sess.day) || suggestNextDay();
 
   $('#btnFinish').addEventListener('click', ()=>{
-    const dayEx=PROGRAM.days[currentDay].exercises;
+    const dayEx=P().days[currentDay].exercises;
     $$('#exerciseList .ex').forEach(card=>{
       const exDef=dayEx.find(e=>e.slug===card.dataset.slug);
       if(exDef) commitExercise(exDef, card);
