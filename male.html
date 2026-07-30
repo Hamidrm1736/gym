@@ -463,7 +463,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.4 · 30 July 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.5 · 30 July 2026</p>
   </section>
 
 </main>
@@ -613,10 +613,10 @@ const HOME_PROGRAM = {
           muscles:'Chest — shapes the line across the chest',
           cues:['Soft bend in the elbows, keep it the whole set','Open wide like hugging a barrel, then bring the dumbbells together over the chest','Squeeze 1 second at the top','Too heavy at the bottom? Shorten the range — never force the stretch'],
           mistakes:['Bending the elbows more and turning it into a press','Dropping the arms too far back'] },
-        { slug:'h-one-arm-row', name:'One-arm dumbbell row on the bench', sets:3, reps:'15–20 / side', type:'w', rest:90, start:'10 kg — 3 seconds down, 1 second squeeze at the top',
+        { slug:'h-db-row', name:'Bent-over dumbbell row (both arms)', sets:3, reps:'15–20', type:'w', rest:90, start:'10 kg dumbbells — 3 seconds down, 1 second squeeze. Feet on the floor, nothing to wobble',
           muscles:'Lats, mid-back — posture and the V-shape',
-          cues:['One hand and knee on the bench, back flat','Pull the dumbbell to your hip pocket, not your chest','Elbow close to the body; hold the squeeze a full second','Outgrown 10 kg? Hold BOTH dumbbells in one hand (20 kg), or row a loaded backpack'],
-          mistakes:['Twisting the torso to lift more','Yanking with the biceps only'] },
+          cues:['Feet hip-width on the floor, hinge forward to about 45°, knees soft','Back flat and braced — chest proud','Row both dumbbells to your hip pockets and squeeze the shoulder blades a full second','3 seconds down every rep. Outgrown 10 kg? Row a loaded backpack by its handles'],
+          mistakes:['Standing up more and more as the set gets hard','Yanking with the biceps instead of pulling the elbows back'] },
         { slug:'h-lateral-raise', name:'Seated lateral raise (bent arms)', sets:3, reps:'10–15', type:'w', rest:60, start:'10 kg dumbbells with elbows bent 90° — bending the arms roughly halves how heavy they feel',
           muscles:'Side shoulders — the width that makes the waist look smaller',
           cues:['Sit upright on the bench so the legs cannot help','Elbows bent to about 90° and kept there — that is the trick that makes 10 kg workable','Raise to shoulder height only, leading with the elbows','Lower over 3 seconds. Still too heavy? Grip the inside end of the dumbbell, or do one arm at a time lying on your side'],
@@ -625,10 +625,10 @@ const HOME_PROGRAM = {
           muscles:'Quads, glutes, core',
           cues:['Hold the dumbbell vertically against your chest','Sit down between the heels, chest tall','As deep as comfortable with heels down','Light weight, so tempo is the difficulty: 3 seconds down, drive up strong'],
           mistakes:['Heels lifting off the floor','Knees caving inward'] },
-        { slug:'h-decline-situp', name:'Decline sit-up on the bench', sets:2, reps:'10–15', type:'r', rest:60, start:'Bodyweight — gentle decline angle, hands on your chest',
-          muscles:'Abs — the bench makes them work harder than floor crunches',
-          cues:['Feet hooked in the pads, gentle decline to start','Curl up by rounding the spine — ribs toward hips','Lower slowly, 3 seconds down','Steeper angle = harder. Only then hold a dumbbell at the chest'],
-          mistakes:['Pulling on the neck','Dropping down fast and bouncing'] },
+        { slug:'h-bicycle-crunch', name:'Bicycle crunch', sets:2, reps:'15–20', type:'r', rest:60, start:'Bodyweight, flat on the floor — slow and controlled',
+          muscles:'Abs & obliques',
+          cues:['Hands lightly behind the head, shoulder blades off the floor','Slow: elbow toward the opposite knee while the other leg extends','Rotate through the ribs, not the neck'],
+          mistakes:['Pulling on the neck','Racing through the reps'] },
         { slug:'h-plank', name:'Plank', sets:2, reps:'30–45 sec', type:'t', rest:60, start:'Bodyweight — hold 30 s',
           muscles:'Deep core — flattens and tightens the tummy wall',
           cues:['Elbows under shoulders, body one straight line','Squeeze the glutes, tuck the tailbone slightly','Keep breathing — don’t hold your breath'],
@@ -675,23 +675,24 @@ const HOME_PROGRAM = {
           mistakes:['Strolling slowly — it should feel like going somewhere'] }
       ]},
     '3': { title:'Home 3 — Legs, core & chest pump', focus:'Legs & glutes focus',
-      warmup:'5 min brisk walk + 15 glute bridges, 10 bodyweight squats and 10 hip hinges with no weight. Then one bar-only set of hip thrusts.',
+      warmup:'5 min brisk walk + 15 bodyweight glute bridges, 10 bodyweight squats and 10 hip hinges with no weight. Then one bar-only set of glute bridges.',
       exercises:[
-        { slug:'h-hip-thrust', name:'Barbell hip thrust (back on the bench)', sets:3, reps:'10–12', type:'w', rest:120, start:'Bar + one 20 kg plate each side (≈60 kg) — you will get strong at this fast',
-          muscles:'Glutes and hamstrings — the one lower-body lift you can safely load really heavy at home',
-          cues:['Sit on the floor with your upper back against the bench, legs straight, and roll the bar up over your thighs until it sits in the crease of your hips',
+        { slug:'h-glute-bridge', name:'Barbell glute bridge (on the floor)', sets:3, reps:'10–12', type:'w', rest:120, start:'Bar + one 20 kg plate each side (≈60 kg) — you will get strong at this fast',
+          muscles:'Glutes and hamstrings — heavy, safe, and nothing can move: just you, the bar and the floor',
+          cues:['Lie flat on your back, knees bent, feet flat — roll the bar up your thighs into the crease of the hips',
                 'ALWAYS pad the bar with a folded towel or mat — bare steel at 60 kg genuinely hurts',
-                'Drive through the heels, squeeze the glutes hard at the top, chin tucked and ribs down — the lower back must not arch',
-                'Setup feels awkward? Do a barbell glute bridge flat on the floor instead — same muscles, simpler set-up'],
-          mistakes:['Arching the lower back at the top instead of squeezing the glutes','Feet too far forward — that turns it into a hamstring lift'] },
+                'Drive through the heels until the hips line up with knees and shoulders, squeeze the glutes hard for 1–2 seconds',
+                'Chin tucked, ribs down — lift with the glutes, never by arching the lower back',
+                'Finished? Roll the bar back down the thighs and sit up — no bench, no balancing, nothing to slide'],
+          mistakes:['Arching the lower back instead of squeezing the glutes','Feet too far from the hips — the shins should be close to vertical at the top'] },
         { slug:'h-reverse-lunge', name:'Dumbbell reverse lunge', sets:3, reps:'10–12 / side', type:'w', rest:90, start:'Bodyweight first session — then the 10 kg dumbbells',
           muscles:'Quads & glutes, one leg at a time',
-          cues:['Step BACK, not forward — far easier on the knees and balance','Front heel carries the weight; push through it to stand','Chest slightly forward','All reps one side then swap. Wobbly? Hold the bench with one hand until the balance comes'],
+          cues:['Step BACK, not forward — far easier on the knees and balance','Front heel carries the weight; push through it to stand','Chest slightly forward','All reps one side then swap. Wobbly? Fingertips on the wall or a door frame — never the bench, it can shift'],
           mistakes:['Pushing off the back foot instead of the front heel','Letting the back knee crash down — touch it softly'] },
-        { slug:'h-step-up', name:'Dumbbell step-up onto the bench', sets:2, reps:'10–12 / side', type:'w', rest:90, start:'10 kg dumbbells — bench flat and locked at its lowest height',
-          muscles:'Glutes, quads and balance',
-          cues:['Whole foot on the bench','Push through the top foot — no push-off from the floor foot','Stand tall at the top, then lower slowly','Check the bench is locked before you start'],
-          mistakes:['Bouncing off the bottom foot','A wobbly unlocked bench — check every time'] },
+        { slug:'h-calf-raise', name:'Standing calf raise with dumbbells', sets:2, reps:'15–20', type:'w', rest:60, start:'10 kg dumbbells at your sides — both feet flat on the floor',
+          muscles:'Calves — the one muscle nothing else in the plan reaches',
+          cues:['Stand tall holding the dumbbells at your sides','Rise onto the balls of the feet as high as you can, squeeze 1 second at the top','Lower slowly until the heels touch down — no bouncing','Too easy? One leg at a time with one dumbbell, fingertips on the wall for balance'],
+          mistakes:['Bouncing fast out of the bottom','Tiny half-range reps'] },
         { slug:'h-pushup', name:'Push-ups (chest pump)', sets:3, reps:'as many as you can', type:'r', rest:60, start:'Bodyweight — flat or knees-down, chase the burn',
           muscles:'Chest, triceps, core — the week’s third chest hit',
           cues:['Same form as Home 1','Stop 1 rep before the arms give out','Feet up on the bench if flat has become too easy'],
@@ -761,7 +762,10 @@ const VIDEOS = {
   'h-goblet':           {id:'MxsFDhcyFyE', title:'How To Perform Goblet Squats', channel:'Buff Dudes'},
   'h-reverse-lunge':    {id:'UeSqJlXDn8M', title:'Reverse Lunges — Form and Tips', channel:'Hypertrophy Coach'},
   'h-bicycle-crunch':   {id:'PAEo-zRSanM', title:'Bicycle Crunches — Proper Form', channel:'Fit Father Project'},
-  'h-side-plank':       {id:'XeN4pEZZJNI', title:'How To Do a Side Plank the Right Way', channel:'Well+Good'}
+  'h-side-plank':       {id:'XeN4pEZZJNI', title:'How To Do a Side Plank the Right Way', channel:'Well+Good'},
+  'h-db-row':           {id:'gfUg6qWohTk', title:'Dumbbell Rows — Proper Form Fixes', channel:'ATHLEAN-X'},
+  'h-glute-bridge':     {id:'0od5lwWMGV8', title:'How To: Barbell Glute Bridge — 3 Golden Rules', channel:'ScottHermanFitness'},
+  'h-calf-raise':       {id:'HvvqTpTongY', title:'How To: Standing Dumbbell Calf Raise', channel:'Live Lean TV'}
 };
 
 const MEALS = [
@@ -1068,13 +1072,14 @@ function homeGuideCard(){
     '<table class="plates"><thead><tr><th>On the bar</th><th>20 kg bar</th><th>10 kg bar</th><th>Used for</th></tr></thead><tbody>'+
     '<tr><td>Bar only</td><td>20 kg</td><td>10 kg</td><td>Warm-up sets</td></tr>'+
     '<tr><td>One 15 kg per side</td><td>50 kg</td><td>40 kg</td><td>Rows · RDL</td></tr>'+
-    '<tr><td>One 20 kg per side</td><td>60 kg</td><td>50 kg</td><td>Hip thrust · next step up</td></tr>'+
-    '<tr><td>15 + 20 per side</td><td>90 kg</td><td>80 kg</td><td>Heavy hip thrusts &amp; RDLs later</td></tr>'+
+    '<tr><td>One 20 kg per side</td><td>60 kg</td><td>50 kg</td><td>Glute bridge · next step up</td></tr>'+
+    '<tr><td>15 + 20 per side</td><td>90 kg</td><td>80 kg</td><td>Heavy glute bridges &amp; RDLs later</td></tr>'+
     '</tbody></table>'+
     '<p class="small" style="margin-top:6px">Always load the <b>same plates on both sides</b> — never a 15 on one side and a 20 on the other.</p>'+
     '<div class="warnbox"><p><b>Safety — read once, then stop worrying</b></p><ul class="plainlist">'+
     '<li><b>Never barbell-bench-press on the bench.</b> With no rack and nobody home to help, a failed rep has nowhere to go — this plan builds your chest with push-ups and dumbbells instead. Want heavy barbell pressing anyway? Learn the <b>floor press</b>: lying on the floor, your arms touch down before the bar can trap you (<a href="https://www.youtube.com/watch?v=vAFw7EPL4eM" target="_blank" rel="noopener" style="color:var(--accent)">video</a>).</li>'+
     '<li>Even if your bench <b>has</b> upright posts, the posts on a folding bench are not built for a 90&nbsp;kg bar. Floor press anyway.</li>'+
+    '<li><b>The bench is only for lying and sitting on.</b> It is not bolted to the floor, so this plan never asks you to stand on it, hook your feet into it, or push it sideways — every exercise either presses the bench straight down into the floor or skips it entirely.</li>'+
     '<li><b>Never</b> a barbell <b>decline</b> press without a rack — head below your hips, feet hooked in, no way out. Use the decline setting for sit-ups only.</li>'+
     '<li><b>Never</b> a barbell <b>back squat</b> without a rack — you cannot get it on your back safely or bail out. Your leg work here is hip thrusts, RDLs and split squats instead, and they are plenty.</li>'+
     '<li><b>No max attempts, ever, while training alone.</b> Leave 2–3 reps in the tank on every barbell lift.</li>'+
@@ -1114,7 +1119,7 @@ function homeGuideCard(){
     '<h3>Worth buying</h3>'+
     '<p class="small"><b>First, measure the hole in one of your plates.</b> About 25&nbsp;mm (a bit bigger than a $2 coin) = standard. About 50&nbsp;mm = Olympic. Buying the wrong one is the classic mistake — it will not fit your bar.</p>'+
     '<ul class="plainlist">'+
-    '<li><b>1. Four 2.5 kg plates — about $27 at Bunnings (CORTEX EnduraShell).</b> The single best thing you can buy. Right now your only steps are 50 → 60 → 90&nbsp;kg; with these you get 50 → 55 → 60 → 65 → 70&nbsp;kg, which is months of steady progress on the rows, RDLs and hip thrusts.</li>'+
+    '<li><b>1. Four 2.5 kg plates — about $27 at Bunnings (CORTEX EnduraShell).</b> The single best thing you can buy. Right now your only steps are 50 → 60 → 90&nbsp;kg; with these you get 50 → 55 → 60 → 65 → 70&nbsp;kg, which is months of steady progress on the rows, RDLs and glute bridges.</li>'+
     '<li><b>2. A resistance band set — about $12 at Kmart.</b> Not just for warm-ups: you currently have <i>no way to pull downwards</i> at home, and that overhead pulling is what builds lat width. Hook a band over a door and you have lat pulldowns and face pulls.</li>'+
     '<li><b>3. Adjustable dumbbells, 2 × 20–24 kg — $70 to $250.</b> The real fix for the dumbbell problem: light enough (2.5–5 kg) for proper side raises and rear delts, heavy enough (20 kg+) for real rows and incline presses. Buy this when the budget allows.</li>'+
     '</ul>'+
