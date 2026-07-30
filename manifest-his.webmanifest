@@ -1,0 +1,10 @@
+{
+  "name": "Gym Tracker",
+  "short_name": "Gym",
+  "start_url": "./male.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#0d0d0d",
+  "icons": [{ "src": "./icon-his.png", "sizes": "192x192", "type": "image/png", "purpose": "any" }]
+}
