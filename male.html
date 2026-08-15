@@ -280,7 +280,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 <header class="app">
   <div class="wrap">
     <div class="topbar">
-      <h1>💪 Gym Tracker <span class="ver">v1.8</span></h1>
+      <h1>💪 Gym Tracker <span class="ver">v1.9</span></h1>
       <div class="grow"></div>
       <span class="date" id="todayLabel"></span>
       <button id="btnTheme" title="Switch light / dark">🌓</button>
@@ -478,7 +478,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.8 · 30 July 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.9 · 15 August 2026</p>
   </section>
 
 </main>
@@ -518,17 +518,17 @@ const GYM_PROGRAM = {
           muscles:'Quads, glutes — big calorie burner',
           cues:['Feet shoulder-width, middle of the platform','Lower until knees reach about 90°','Knees track in line with your toes','Push through the whole foot; don’t slam the knees straight'],
           mistakes:['Going so deep your lower back rolls off the pad','Half reps with too much weight'] },
-        { slug:'plank', name:'Plank', sets:3, reps:'30–45 sec', type:'t', rest:60, start:'Bodyweight — hold 30 s',
-          muscles:'Deep core — flattens and tightens the tummy wall',
-          cues:['Elbows under shoulders, body one straight line','Squeeze the glutes, tuck the tailbone slightly','Keep breathing — don’t hold your breath'],
-          mistakes:['Hips sagging down or lifting too high','Letting the head drop'] },
+        { slug:'calf-press', name:'Calf press (on the leg press machine)', sets:3, reps:'12–15', type:'w', rest:60, start:'40 kg — same machine as the leg press, straight after it',
+          muscles:'Calves — the one muscle the plan never reached before',
+          cues:['Stay on the leg press after your last set','Balls of the feet on the bottom edge of the platform, heels hanging off','Push through the toes as far as you can, squeeze the calves 1 second','Lower slowly until you feel a deep stretch — the stretch is half the exercise','Keep a slight bend in the knees the whole time'],
+          mistakes:['Bouncing fast half reps','Locking the knees out hard'] },
         { slug:'cable-crunch', name:'Kneeling cable crunch', sets:3, reps:'12–15', type:'w', rest:60, start:'20 kg',
           muscles:'Abs',
           cues:['Kneel down, hold the rope beside your head','Crunch the ribs down toward the hips — round the spine','Hips stay still — only the spine moves','Return slowly'],
           mistakes:['Pulling with the arms instead of the abs','Bowing from the hips'] },
-        { slug:'incline-walk', name:'Incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
+        { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
-          cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','Don’t hold the rails (light touch for balance is fine)','Steady pace — you should be able to talk, just barely'],
+          cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','Don’t hold the rails (light touch for balance is fine)','Steady pace — you should be able to talk, just barely','Fancy a change? 10 min on the exercise bike or cross-trainer at the same effort counts too'],
           mistakes:['Holding the rails and leaning back — removes the work','Turning it into a sprint — this is a steady burn'] }
       ]},
     B: { title:'Day B — Back, shoulders & core', focus:'V-taper focus',
@@ -558,30 +558,30 @@ const GYM_PROGRAM = {
           muscles:'Lower abs',
           cues:['Hang from the bar (or use the captain’s chair)','Curl the knees up to the chest','Tilt the pelvis up at the top — that’s the ab part','Lower slowly, no swinging'],
           mistakes:['Swinging for momentum','Only lifting the thighs without curling the pelvis'] },
-        { slug:'side-plank', name:'Side plank', sets:2, reps:'30 sec / side', type:'t', rest:60, start:'Bodyweight — 20–30 s per side',
+        { slug:'torso-rotation', name:'Torso rotation machine', sets:3, reps:'12 / side', type:'w', rest:60, start:'20 kg stack — light and controlled',
           muscles:'Obliques — tightens the sides of the waist',
-          cues:['Elbow under the shoulder, body one straight line','Push the hips up and slightly forward','Keep breathing; then swap sides'],
-          mistakes:['Hips dropping toward the floor','Rolling the chest forward'] },
-        { slug:'incline-walk', name:'Incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
+          cues:['Set the pads so you start with a comfortable twist to one side','Rotate smoothly using the waist, not the arms','Pause 1 second, come back slowly — no flopping through the middle','All reps one side, then swap','No torso machine at your gym? A standing cable woodchop hits the same muscles'],
+          mistakes:['Going heavy and jerking the weight around','Twisting fast through a huge range — smooth and controlled'] },
+        { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
-          cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','No holding the rails','Steady pace, 10 minutes'],
+          cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','No holding the rails','Steady pace, 10 minutes','Fancy a change? 10 min on the exercise bike or cross-trainer at the same effort counts too'],
           mistakes:['Holding the rails and leaning back'] }
       ]},
     C: { title:'Day C — Legs, core & chest pump', focus:'Legs & core focus',
-      warmup:'5 min brisk walk. Then 2 light warm-up sets of goblet squat with a light dumbbell.',
+      warmup:'5 min brisk walk. Then 2 light warm-up sets on the leg press (about half your working weight).',
       exercises:[
-        { slug:'goblet-squat', name:'Goblet squat', sets:3, reps:'10–12', type:'w', rest:90, start:'15 kg dumbbell',
-          muscles:'Quads, glutes, core',
-          cues:['Hold one dumbbell vertically against your chest','Sit down between the heels, chest tall','Thighs to about parallel with the floor','Drive up through the mid-foot'],
-          mistakes:['Heels lifting off the floor','Knees caving inward'] },
+        { slug:'leg-press-high', name:'Leg press — feet high (glutes & hamstrings)', sets:3, reps:'10–12', type:'w', rest:90, start:'60 kg (machine total) — lighter than your Day A leg press',
+          muscles:'Glutes, hamstrings, quads — the squat replacement that is easy on the knees',
+          cues:['Same machine as Day A, but place the feet HIGH on the platform, shoulder-width','High feet = the hips and glutes do the work and the knees bend less','Lower under control until the knees reach about 90°','Push through the HEELS; don’t slam the knees straight at the top'],
+          mistakes:['Feet low on the platform — that is the knee-heavy version','Going so deep the lower back rolls off the pad'] },
+        { slug:'chest-press-machine', name:'Seated chest press (machine)', sets:3, reps:'10–12', type:'w', rest:90, start:'25–30 kg on the stack',
+          muscles:'Chest, front shoulders, triceps — the machine version of a push-up',
+          cues:['Set the seat so the handles line up with the middle of your chest','Feet flat, back and head against the pad the whole set','Press out smoothly, squeeze the chest 1 second — don’t slam the arms straight','Come back slowly to a comfortable stretch'],
+          mistakes:['Seat too high or too low — the handles should sit at chest height','Shoulders rolling forward off the pad as you press'] },
         { slug:'low-high-cable-fly', name:'Low-to-high cable fly', sets:3, reps:'12–15', type:'w', rest:60, start:'7.5 kg each side',
           muscles:'Upper chest — fills in the upper chest line',
           cues:['Pulleys at the lowest setting, step forward','Slight forward lean, soft elbows','Sweep the hands up and in, finishing at eye level','Squeeze the upper chest 1 second, lower slowly'],
           mistakes:['Turning it into a front raise — shoulders take over','Standing too upright'] },
-        { slug:'push-up', name:'Push-ups', sets:3, reps:'as many as you can', type:'r', rest:60, start:'Bodyweight — knees-down version is fine',
-          muscles:'Chest, triceps, core',
-          cues:['Hands a little wider than the shoulders','Body one straight line — squeeze glutes','Chest down to about a fist-height from the floor','Push the floor away, squeeze the chest at the top. Knees-down version = same form, easier'],
-          mistakes:['Hips sagging','Small half reps'] },
         { slug:'one-arm-db-row', name:'One-arm dumbbell row', sets:3, reps:'10–12 / side', type:'w', rest:90, start:'15 kg',
           muscles:'Lats, mid-back',
           cues:['One hand and knee on the bench, back flat','Pull the dumbbell to your hip pocket, not your chest','Elbow stays close to the body','Squeeze 1 second, lower with a long stretch'],
@@ -590,17 +590,13 @@ const GYM_PROGRAM = {
           muscles:'Hamstrings',
           cues:['Pad snug just above the heels','Curl smoothly to a full squeeze, hold 1 second','Take 2–3 seconds on the way back — that’s where the muscle is built'],
           mistakes:['Hips lifting off the pad','Kicking fast and dropping fast'] },
-        { slug:'bicycle-crunch', name:'Bicycle crunch', sets:3, reps:'15–20', type:'r', rest:60, start:'Bodyweight — slow, controlled',
-          muscles:'Abs & obliques',
-          cues:['Hands lightly behind the head, shoulder blades off the floor','Slow: elbow toward the opposite knee while the other leg extends','Rotate through the ribs, not the neck'],
-          mistakes:['Pulling on the neck','Racing through the reps'] },
-        { slug:'dead-bug', name:'Dead bug', sets:3, reps:'10 / side', type:'r', rest:60, start:'Bodyweight — slow, controlled',
-          muscles:'Deep core — trains the tummy to stay flat',
-          cues:['On your back, arms up, knees bent 90°','Press the lower back into the floor and keep it there','Breathe out as the opposite arm and leg lower','Slow and controlled, alternate sides'],
-          mistakes:['Lower back arching off the floor','Moving both legs at once'] },
-        { slug:'incline-walk', name:'Incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
+        { slug:'ab-crunch-machine', name:'Ab crunch machine (seated)', sets:3, reps:'12–15', type:'w', rest:60, start:'25 kg stack — light enough to curl smoothly',
+          muscles:'Abs — the machine version of a crunch',
+          cues:['Sit down and set the pads or handles snug against you','Curl the ribs down toward the hips — round the spine, same feel as the cable crunch','Squeeze 1 second, then return slowly without letting the stack slam','No ab machine at your gym? Do the kneeling cable crunch from Day A instead'],
+          mistakes:['Pulling with the arms instead of curling with the abs','Letting the weight yank you back open fast'] },
+        { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
-          cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','No holding the rails','Steady pace, 10 minutes'],
+          cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','No holding the rails','Steady pace, 10 minutes','Fancy a change? 10 min on the exercise bike or cross-trainer at the same effort counts too'],
           mistakes:['Holding the rails and leaning back'] }
       ]}
   }
@@ -611,7 +607,7 @@ const GYM_PROGRAM = {
    plates · 2×10 kg hex dumbbells. Same goal as the gym plan.
    --------------------------------------------------------------- */
 const HOME_PROGRAM = {
-  order: ['1','2','3'],
+  order: ['1','2','3','4'],
   days: {
     '1': { title:'Home 1 — Chest & full body', focus:'Chest focus',
       warmup:'5 min brisk walk or marching on the spot + 20 arm circles each way + 10 slow bodyweight squats. Then 8 easy knee push-ups before the real sets. No long stretching before lifting — save that for after.',
@@ -636,10 +632,10 @@ const HOME_PROGRAM = {
           muscles:'Side shoulders — the width that makes the waist look smaller',
           cues:['Sit upright on the bench so the legs cannot help','Elbows bent to about 90° and kept there — that is the trick that makes 10 kg workable','Raise to shoulder height only, leading with the elbows','Lower over 3 seconds. Still too heavy? Grip the inside end of the dumbbell, or do one arm at a time lying on your side'],
           mistakes:['Straightening the arms — instantly doubles the weight','Shrugging or swinging the body'] },
-        { slug:'h-goblet', name:'Goblet squat', sets:3, reps:'15–20', type:'w', rest:90, start:'One 10 kg dumbbell at the chest — 3 seconds down every rep',
-          muscles:'Quads, glutes, core',
-          cues:['Hold the dumbbell vertically against your chest','Sit down between the heels, chest tall','As deep as comfortable with heels down','Light weight, so tempo is the difficulty: 3 seconds down, drive up strong'],
-          mistakes:['Heels lifting off the floor','Knees caving inward'] },
+        { slug:'h-reverse-lunge', name:'Dumbbell reverse lunge', sets:3, reps:'10–12 / side', type:'w', rest:90, start:'Bodyweight first session — then the 10 kg dumbbells',
+          muscles:'Quads & glutes, one leg at a time — the knee-friendly squat replacement',
+          cues:['Step BACK, not forward — far easier on the knees and balance','Front heel carries the weight; push through it to stand','Chest slightly forward','All reps one side then swap. Wobbly? Fingertips on the wall or a door frame — never the bench, it can shift'],
+          mistakes:['Pushing off the back foot instead of the front heel','Letting the back knee crash down — touch it softly'] },
         { slug:'h-bicycle-crunch', name:'Bicycle crunch', sets:2, reps:'15–20', type:'r', rest:60, start:'Bodyweight, flat on the floor — slow and controlled',
           muscles:'Abs & obliques',
           cues:['Hands lightly behind the head, shoulder blades off the floor','Slow: elbow toward the opposite knee while the other leg extends','Rotate through the ribs, not the neck'],
@@ -716,12 +712,40 @@ const HOME_PROGRAM = {
           muscles:'Abs & obliques',
           cues:['Hands lightly behind the head, shoulder blades off the floor','Slow: elbow toward the opposite knee while the other leg extends','Rotate through the ribs, not the neck'],
           mistakes:['Pulling on the neck','Racing through the reps'] },
-        { slug:'h-dead-bug', name:'Dead bug', sets:2, reps:'10 / side', type:'r', rest:60, start:'Bodyweight — slow and controlled',
-          muscles:'Deep core — trains the tummy to stay flat',
-          cues:['On your back, arms up, knees bent 90°','Press the lower back into the floor and keep it there','Breathe out as the opposite arm and leg lower','Slow and controlled, alternate sides'],
-          mistakes:['Lower back arching off the floor','Moving both legs at once'] },
+        { slug:'h-plank', name:'Plank', sets:2, reps:'30–45 sec', type:'t', rest:60, start:'Bodyweight — hold 30 s',
+          muscles:'Deep core — flattens and tightens the tummy wall',
+          cues:['Elbows under shoulders, body one straight line','Squeeze the glutes, tuck the tailbone slightly','Keep breathing — don’t hold your breath'],
+          mistakes:['Hips sagging down or lifting too high','Letting the head drop'] },
         { slug:'h-walk', name:'Brisk walk outside (finisher)', sets:1, reps:'10–15 min', type:'m', rest:0, start:'10–15 min easy — your longer walks belong on rest days, see the guide', novid:true,
           muscles:'Fat-burning finisher — replaces the treadmill',
+          cues:['Steady, purposeful pace out the front door','Hills or stairs are your incline setting'],
+          mistakes:['Strolling slowly — it should feel like going somewhere'] }
+      ]},
+    '4': { title:'Home 4 — Quick core & push (about 20 min)', focus:'Bodyweight only — the floor moves now live here, not at the gym',
+      warmup:'2 min marching on the spot + 20 arm circles + 10 slow bodyweight squats — then straight in.',
+      exercises:[
+        { slug:'h-pushup', name:'Push-ups', sets:3, reps:'as many as you can', type:'r', rest:60, start:'Bodyweight — flat or knees-down, stop 1 rep before the arms give out',
+          muscles:'Chest, triceps, core',
+          cues:['Hands a little wider than the shoulders, body one straight line — squeeze the glutes','Chest down to a fist above the floor, then push the floor away','Feet up on the bench if flat has become too easy'],
+          mistakes:['Hips sagging','Racing through half reps'] },
+        { slug:'h-leg-raise', name:'Reverse crunch', sets:3, reps:'12–15', type:'r', rest:60, start:'Bodyweight — on the floor or along the bench',
+          muscles:'Lower abs',
+          cues:['On your back, hands beside the hips','Curl the knees up AND lift the hips slightly — the hip lift is the exercise','Lower slowly; the feet hover, never rest','Lower back stays pressed down'],
+          mistakes:['Swinging the legs with momentum','Only moving the legs without curling the pelvis'] },
+        { slug:'h-bicycle-crunch', name:'Bicycle crunch', sets:3, reps:'15–20', type:'r', rest:60, start:'Bodyweight — slow, controlled',
+          muscles:'Abs & obliques',
+          cues:['Hands lightly behind the head, shoulder blades off the floor','Slow: elbow toward the opposite knee while the other leg extends','Rotate through the ribs, not the neck'],
+          mistakes:['Pulling on the neck','Racing through the reps'] },
+        { slug:'h-plank', name:'Plank', sets:2, reps:'30–45 sec', type:'t', rest:60, start:'Bodyweight — hold 30 s',
+          muscles:'Deep core — flattens and tightens the tummy wall',
+          cues:['Elbows under shoulders, body one straight line','Squeeze the glutes, tuck the tailbone slightly','Keep breathing — don’t hold your breath'],
+          mistakes:['Hips sagging down or lifting too high','Letting the head drop'] },
+        { slug:'h-side-plank', name:'Side plank', sets:2, reps:'20–30 sec / side', type:'t', rest:60, start:'Bodyweight — knees-down version is fine',
+          muscles:'Obliques — tightens the sides of the waist',
+          cues:['Elbow under the shoulder, body one straight line','Push the hips up and slightly forward','Keep breathing; then swap sides'],
+          mistakes:['Hips dropping toward the floor','Rolling the chest forward'] },
+        { slug:'h-walk', name:'Brisk walk outside (finisher)', sets:1, reps:'10–15 min', type:'m', rest:0, start:'Optional — 10–15 min easy to finish the session', novid:true,
+          muscles:'Fat-burning finisher',
           cues:['Steady, purposeful pace out the front door','Hills or stairs are your incline setting'],
           mistakes:['Strolling slowly — it should feel like going somewhere'] }
       ]}
@@ -754,6 +778,12 @@ const VIDEOS = {
   'bicycle-crunch':        {id:'PAEo-zRSanM', title:'Bicycle Crunches for Beginners — Proper Form', channel:'Fit Father Project'},
   'dead-bug':              {id:'cnBYCszEoWQ', title:'Dead Bug Exercises', channel:'Bob & Brad'},
   'incline-walk':          {id:'Q6eCpcNsmC0', title:'12-3-30 Treadmill Workout Review', channel:'The Red Delta Project'},
+  /* ---- machine swaps (all verified 15 Aug 2026) ---- */
+  'calf-press':            {id:'dhRz1Ns60Zg', title:'How To Do Calf Raises On The Leg Press', channel:'PureGym'},
+  'torso-rotation':        {id:'V6K9bt4zbjc', title:'How To Use The Torso Rotation Machine (Life Fitness)', channel:'Live Lean TV Daily Exercises'},
+  'leg-press-high':        {id:'oujca3_Shgw', title:'How To: Leg Press', channel:'ScottHermanFitness'},
+  'chest-press-machine':   {id:'sqNwDkUU_Ps', title:'How To Use The Chest Press Machine', channel:'PureGym'},
+  'ab-crunch-machine':     {id:'NpjB_rp756Y', title:'Life Fitness Circuit Series Ab Crunch Instructions', channel:'Life Fitness / Hammer Strength'},
   /* ---- home program (all verified 30 July 2026) ---- */
   'h-floor-press':      {id:'vAFw7EPL4eM', title:'Barbell Floor Press — Exercise Tutorial', channel:'Buff Dudes'},
   'h-incline-db-press': {id:'8iPEnn-ltC8', title:'How To: Dumbbell Incline Chest Press', channel:'ScottHermanFitness'},
@@ -803,10 +833,18 @@ const STEPS = {
   'leg-press':{i:[
     ['Leg-press-1-1024x670.png','Feet shoulder-width in the middle of the platform, back and hips flat against the seat.'],
     ['Leg-press-2-1024x670.png','Lower until the knees reach about 90°, knees tracking in line with the toes, then push through the whole foot — don’t slam the knees straight.']]},
+  'leg-press-high':{i:[
+    ['Leg-press-1-1024x670.png','Same machine as Day A — but place the feet HIGH on the platform, shoulder-width, so the glutes and hamstrings take over.'],
+    ['Leg-press-2-1024x670.png','Lower under control to about 90° at the knees, then push through the HEELS — don’t slam the knees straight.']],
+    n:'The picture shows the standard mid-platform stance — yours goes higher up the platform, which keeps the knees happier.'},
   'cable-crunch':{i:[
     ['Seated ab crunch with cable 1.svg','Hold the rope beside your head. Hips stay still — only the spine moves.'],
     ['Seated ab crunch with cable 2.svg','Crunch the ribs down toward the hips, rounding the spine. Return slowly against the weight.']],
     n:'The picture shows the seated version — you do the same movement kneeling on the floor.'},
+  'ab-crunch-machine':{i:[
+    ['Seated ab crunch with cable 1.svg','Sit with the pads or handles set snug. Hips stay still — only the spine moves.'],
+    ['Seated ab crunch with cable 2.svg','Curl the ribs down toward the hips, rounding the spine. Return slowly — don’t let the stack slam.']],
+    n:'The picture shows the seated cable version — the crunch movement on the machine is exactly the same.'},
   'lat-pulldown':{i:[
     ['Wide-grip-lat-pull-down-1.gif','Grip a little wider than the shoulders, chest up, arms straight overhead.'],
     ['Wide-grip-lat-pull-down-2.gif','Pull the bar to the upper chest, driving the elbows down and back. Squeeze 1 second, then slow on the way up.']]},
