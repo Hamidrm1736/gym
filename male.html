@@ -295,7 +295,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 <header class="app">
   <div class="wrap">
     <div class="topbar">
-      <h1>💪 Gym Tracker <span class="ver">v2.0</span></h1>
+      <h1>💪 Gym Tracker <span class="ver">v2.1</span></h1>
       <div class="grow"></div>
       <span class="date" id="todayLabel"></span>
       <button id="btnTheme" title="Switch light / dark">🌓</button>
@@ -519,7 +519,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v2.0 · 12 October 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v2.1 · 12 October 2026</p>
   </section>
 
 </main>
@@ -563,10 +563,10 @@ const GYM_PROGRAM = {
           muscles:'Calves — the one muscle the plan never reached before',
           cues:['Stay on the leg press after your last set','Balls of the feet on the bottom edge of the platform, heels hanging off','Push through the toes as far as you can, squeeze the calves 1 second','Lower slowly until you feel a deep stretch — the stretch is half the exercise','Keep a slight bend in the knees the whole time'],
           mistakes:['Bouncing fast half reps','Locking the knees out hard'] },
-        { slug:'cable-crunch', name:'Kneeling cable crunch', sets:3, reps:'12–15', type:'w', rest:60, start:'20 kg',
-          muscles:'Abs',
-          cues:['Kneel down, hold the rope beside your head','Crunch the ribs down toward the hips — round the spine','Hips stay still — only the spine moves','Return slowly'],
-          mistakes:['Pulling with the arms instead of the abs','Bowing from the hips'] },
+        { slug:'ab-crunch-machine', name:'Ab crunch machine (seated)', sets:3, reps:'12–15', type:'w', rest:60, start:'25 kg stack — light enough to curl smoothly',
+          muscles:'Abs — the machine version of a crunch',
+          cues:['Sit down and set the pads or handles snug against you','Curl the ribs down toward the hips — round the spine','Squeeze 1 second, then return slowly without letting the stack slam','You do this one on Day A and Day C — use the same weight on both days','Machine busy? Do the knee raise from Day B instead'],
+          mistakes:['Pulling with the arms instead of curling with the abs','Letting the weight yank you back open fast'] },
         { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
           cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','Don’t hold the rails (light touch for balance is fine)','Steady pace — you should be able to talk, just barely','Fancy a change? 10 min on the exercise bike or cross-trainer at the same effort counts too'],
@@ -599,10 +599,10 @@ const GYM_PROGRAM = {
           muscles:'Lower abs',
           cues:['Hang from the bar (or use the captain’s chair)','Curl the knees up to the chest','Tilt the pelvis up at the top — that’s the ab part','Lower slowly, no swinging'],
           mistakes:['Swinging for momentum','Only lifting the thighs without curling the pelvis'] },
-        { slug:'torso-rotation', name:'Torso rotation machine', sets:3, reps:'12 / side', type:'w', rest:60, start:'20 kg stack — light and controlled',
+        { slug:'cable-woodchop', name:'Cable woodchop (standing, high to low)', sets:3, reps:'12 / side', type:'w', rest:60, start:'10 kg — light, smooth and controlled',
           muscles:'Obliques — tightens the sides of the waist',
-          cues:['Set the pads so you start with a comfortable twist to one side','Rotate smoothly using the waist, not the arms','Pause 1 second, come back slowly — no flopping through the middle','All reps one side, then swap','No torso machine at your gym? A standing cable woodchop hits the same muscles'],
-          mistakes:['Going heavy and jerking the weight around','Twisting fast through a huge range — smooth and controlled'] },
+          cues:['Set the pulley at the top and clip on one handle','Stand side-on to the machine, feet a little wider than the shoulders, knees soft','Hold the handle with both hands, arms almost straight','Pull it down and across your body to the opposite hip — like chopping wood','Turn the hips and chest together, and let the foot nearest the machine turn on its toes','Come back up slowly. All reps one side, then swap'],
+          mistakes:['Pulling with the arms only — your body does the turning, the arms just hold on','Going heavy and jerking the weight around','Twisting with both feet stuck flat on the floor — that twists the knees'] },
         { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
           cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','No holding the rails','Steady pace, 10 minutes','Fancy a change? 10 min on the exercise bike or cross-trainer at the same effort counts too'],
@@ -633,7 +633,7 @@ const GYM_PROGRAM = {
           mistakes:['Hips lifting off the pad','Kicking fast and dropping fast'] },
         { slug:'ab-crunch-machine', name:'Ab crunch machine (seated)', sets:3, reps:'12–15', type:'w', rest:60, start:'25 kg stack — light enough to curl smoothly',
           muscles:'Abs — the machine version of a crunch',
-          cues:['Sit down and set the pads or handles snug against you','Curl the ribs down toward the hips — round the spine, same feel as the cable crunch','Squeeze 1 second, then return slowly without letting the stack slam','No ab machine at your gym? Do the kneeling cable crunch from Day A instead'],
+          cues:['Sit down and set the pads or handles snug against you','Curl the ribs down toward the hips — round the spine','Squeeze 1 second, then return slowly without letting the stack slam','You do this one on Day A and Day C — use the same weight on both days','Machine busy? Do the knee raise from Day B instead'],
           mistakes:['Pulling with the arms instead of curling with the abs','Letting the weight yank you back open fast'] },
         { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
@@ -825,6 +825,8 @@ const VIDEOS = {
   'leg-press-high':        {id:'oujca3_Shgw', title:'How To: Leg Press', channel:'ScottHermanFitness'},
   'chest-press-machine':   {id:'sqNwDkUU_Ps', title:'How To Use The Chest Press Machine', channel:'PureGym'},
   'ab-crunch-machine':     {id:'NpjB_rp756Y', title:'Life Fitness Circuit Series Ab Crunch Instructions', channel:'Life Fitness / Hammer Strength'},
+  /* ---- swaps from feedback (verified 12 Oct 2026) ---- */
+  'cable-woodchop':        {id:'WKFHw415Vdw', title:'Cable Woodchop (High to Low)', channel:'Discovery Learning'},
   /* ---- home program (all verified 30 July 2026) ---- */
   'h-floor-press':      {id:'vAFw7EPL4eM', title:'Barbell Floor Press — Exercise Tutorial', channel:'Buff Dudes'},
   'h-incline-db-press': {id:'8iPEnn-ltC8', title:'How To: Dumbbell Incline Chest Press', channel:'ScottHermanFitness'},
@@ -1464,6 +1466,8 @@ function renderLibrary(){
         box.appendChild(img);
         const play=el('button','playbtn'); play.setAttribute('aria-label','Play video: '+ex.name);
         play.addEventListener('click', ()=>{
+          /* opened as a file on a computer, YouTube refuses to play inside the page (Error 153) — open the video on YouTube instead */
+          if(location.protocol==='file:'){ window.open('https://www.youtube.com/watch?v='+v.id, '_blank', 'noopener'); return; }
           box.textContent='';
           const f=document.createElement('iframe');
           f.src='https://www.youtube-nocookie.com/embed/'+v.id+'?autoplay=1&rel=0';
@@ -1585,11 +1589,13 @@ function feedbackText(){
   if(state.feedbackNote.trim()) out.push('', 'ANYTHING ELSE', state.feedbackNote.trim());
   /* notes typed on exercises during workouts, newest first */
   const names={}; ALL_EX.forEach(e=>names[e.slug]=e.name);
+  /* an exercise that has since left the plan: 'torso-rotation' → 'Torso rotation (old exercise)' */
+  const oldName=slug=>{ const t=slug.replace(/^h-/,'').replace(/-/g,' '); return t.charAt(0).toUpperCase()+t.slice(1)+' (old exercise)'; };
   const wn=[];
   Object.keys(state.sessions).sort().reverse().forEach(d=>{
     const s=state.sessions[d];
     Object.entries(s.ex||{}).forEach(([slug,x])=>{
-      if(x && x.note && x.note.trim()) wn.push('• '+d+' · '+dayName(locOf(s), s.day||'?')+' · '+(names[slug]||slug)+': '+x.note.trim());
+      if(x && x.note && x.note.trim()) wn.push('• '+d+' · '+dayName(locOf(s), s.day||'?')+' · '+(names[slug]||oldName(slug))+': '+x.note.trim());
     });
   });
   block('NOTES WRITTEN DURING WORKOUTS', wn.slice(0,30));
@@ -1605,7 +1611,7 @@ function feedbackText(){
 function bindFeedback(){
   $('#fbGeneral').addEventListener('input', ev=>{ state.feedbackNote=ev.target.value; save(); });
   const ready=()=>{
-    if(Object.keys(state.feedback).length || state.feedbackNote.trim()) return true;
+    if(ALL_EX.some(e=>state.feedback[e.slug]) || state.feedbackNote.trim()) return true;   /* ratings of exercises no longer in the plan don’t count */
     showToast('Rate an exercise first 👍 👎'); return false;
   };
   $$('.fbcopy').forEach(b=>b.addEventListener('click', ()=>{
