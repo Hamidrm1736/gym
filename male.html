@@ -151,7 +151,7 @@ ul.plainlist li::before{content:"·"; color:var(--muted); margin-right:8px}
 
 /* ============ EXERCISE LIBRARY ============ */
 .libcard{margin-bottom:12px; scroll-margin-top:120px}
-.libcard.flash,.ex.flash{animation:flash 1.2s ease}
+.libcard.flash,.ex.flash,.fbcard.flash{animation:flash 1.2s ease}
 @keyframes flash{0%,60%{box-shadow:0 0 0 2px var(--accent)}100%{box-shadow:none}}
 .muscle{font-size:.8rem; color:var(--accent); font-weight:600}
 .cues{margin:8px 0 0; padding-left:0; list-style:none}
@@ -179,6 +179,21 @@ ul.plainlist li::before{content:"·"; color:var(--muted); margin-right:8px}
 .stepnum{font-weight:700; color:var(--accent)}
 .stepnote{font-size:.78rem; color:var(--ink-2); margin-top:9px; padding:6px 8px; border-left:3px solid var(--series-2); background:var(--wash); border-radius:0 6px 6px 0}
 .stepcred{font-size:.72rem; color:var(--muted); margin-top:8px}
+
+/* ============ FEEDBACK ============ */
+.fbcard{margin-bottom:10px; padding:12px 14px; scroll-margin-top:120px}
+.fbcard.up{box-shadow:inset 3px 0 0 var(--good)}
+.fbcard.down{box-shadow:inset 3px 0 0 var(--bad)}
+.fbhead{display:flex; align-items:flex-start; gap:10px}
+.fbhead .grow{flex:1; min-width:0}
+.fbname{font-weight:700; font-size:.98rem}
+.fbwhere{font-size:.8rem; color:var(--muted)}
+.fbbtn.on{font-weight:700}
+.fbbtn.up.on{border-color:var(--good); color:var(--good); background:color-mix(in srgb, var(--good) 14%, var(--surface-2))}
+.fbbtn.down.on{border-color:var(--bad); color:var(--bad); background:color-mix(in srgb, var(--bad) 14%, var(--surface-2))}
+/* 16px text so the iPhone does not zoom the page when the box is tapped */
+.fbcard .exfoot input.note{font-size:1rem; min-width:180px}
+textarea.fbtext{width:100%; min-height:150px; font-size:.82rem; margin-top:10px}
 
 /* ============ MEALS ============ */
 .mealslot{padding:10px 0; border-bottom:1px solid var(--hairline)}
@@ -280,7 +295,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 <header class="app">
   <div class="wrap">
     <div class="topbar">
-      <h1>💪 Gym Tracker <span class="ver">v1.9</span></h1>
+      <h1>💪 Gym Tracker <span class="ver">v2.0</span></h1>
       <div class="grow"></div>
       <span class="date" id="todayLabel"></span>
       <button id="btnTheme" title="Switch light / dark">🌓</button>
@@ -289,6 +304,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <button data-view="dashboard" class="active">Home</button>
       <button data-view="workout">Workout</button>
       <button data-view="exercises">Exercises</button>
+      <button data-view="feedback">Feedback</button>
       <button data-view="meals">Meal Plan</button>
       <button data-view="progress">Progress</button>
       <button data-view="backup">Backup</button>
@@ -341,6 +357,31 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small" style="margin-top:6px">Want more depth? The <a href="https://www.muscleandstrength.com/exercises" target="_blank" rel="noopener" style="color:var(--accent)">Muscle &amp; Strength exercise database</a> has written guides for every movement.</p>
     </div>
     <div id="libraryList"></div>
+  </section>
+
+  <!-- ============ FEEDBACK ============ -->
+  <section class="view" id="view-feedback">
+    <div class="card">
+      <h2>💬 Your feedback</h2>
+      <p style="font-size:.9rem">Every exercise in the plan is listed below. Tap <b>👍 Like</b> or <b>👎 Don’t like</b>, and write a few words why — for example "hurts my knee", "machine is always busy" or "too hard". It is saved on this device as you go.</p>
+      <p class="small" id="fbCount" style="margin-top:8px; font-weight:600"></p>
+      <div class="row" style="margin-top:10px">
+        <button class="btn fbcopy">📋 Copy my feedback</button>
+        <button class="btn ghost fbshare" hidden>Share…</button>
+      </div>
+      <p class="small" style="margin-top:8px">Finished? Press <b>Copy my feedback</b>, then paste it into the chat.</p>
+      <textarea class="fbtext" id="fbBox" readonly hidden spellcheck="false" aria-label="Your feedback as text"></textarea>
+    </div>
+    <div id="feedbackList"></div>
+    <div class="card">
+      <h2>📝 Anything else?</h2>
+      <p class="small">Thoughts about the whole plan — too long, too easy, something missing…</p>
+      <textarea id="fbGeneral" rows="3" style="width:100%; margin-top:8px" placeholder="Write here (optional)" aria-label="General feedback"></textarea>
+      <div class="row" style="margin-top:10px">
+        <button class="btn fbcopy">📋 Copy my feedback</button>
+        <button class="btn ghost fbshare" hidden>Share…</button>
+      </div>
+    </div>
   </section>
 
   <!-- ============ MEALS ============ -->
@@ -443,7 +484,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
   <section class="view" id="view-backup">
     <div class="card">
       <h2>⬇️ Export backup</h2>
-      <p class="small">Everything (workouts, measurements, meal edits) in one JSON file. Do this weekly — browsers can clear local data.</p>
+      <p class="small">Everything (workouts, measurements, meal edits, feedback) in one JSON file. Do this weekly — browsers can clear local data.</p>
       <div class="row" style="margin-top:10px">
         <button class="btn" id="btnExport">Download backup file</button>
         <button class="btn ghost" id="btnShowJson">Show JSON</button>
@@ -478,7 +519,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v1.9 · 15 August 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v2.0 · 12 October 2026</p>
   </section>
 
 </main>
@@ -979,7 +1020,7 @@ const SHOPPING = {
    APP LOGIC
    ===================================================================== */
 const STORE_KEY = 'gymTrackerData';
-const DEFAULT_STATE = { version:1, settings:{theme:'dark', startDate:'', startWeightKg:0, location:'gym'}, sessions:{}, measurements:[], mealEdits:{}, shopping:{} };
+const DEFAULT_STATE = { version:1, settings:{theme:'dark', startDate:'', startWeightKg:0, location:'gym'}, sessions:{}, measurements:[], mealEdits:{}, shopping:{}, feedback:{}, feedbackNote:'' };
 
 const $  = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
@@ -1005,6 +1046,8 @@ function normalize(s){
   out.measurements = Array.isArray(s.measurements) ? s.measurements : [];
   out.mealEdits = (s.mealEdits && typeof s.mealEdits==='object') ? s.mealEdits : {};
   out.shopping = (s.shopping && typeof s.shopping==='object') ? s.shopping : {};
+  out.feedback = (s.feedback && typeof s.feedback==='object') ? s.feedback : {};
+  out.feedbackNote = typeof s.feedbackNote==='string' ? s.feedbackNote : '';
   out.settings.location = out.settings.location==='home' ? 'home' : 'gym';
   out.version = 1;
   return out;
@@ -1040,10 +1083,10 @@ function switchView(name){
   if(location.hash !== '#'+name){ try{ history.replaceState(null,'','#'+name); }catch(e){} }
   if(name==='dashboard') renderDashboard();
   if(name==='progress') renderProgress();
-  /* coming back from a "How to" video → land on the exercise you were doing */
-  if(name==='workout' && lastHowToSlug){
-    const slug=lastHowToSlug; lastHowToSlug=null;
-    const card=$('#exerciseList .ex[data-slug="'+slug+'"]');
+  /* coming back from a "How to" video → land on the exercise you were on */
+  if(lastHowTo && lastHowTo.view===name){
+    const card=$((name==='feedback' ? '#feedbackList .fbcard' : '#exerciseList .ex')+'[data-slug="'+lastHowTo.slug+'"]');
+    lastHowTo=null;
     if(card){
       setTimeout(()=>{
         card.scrollIntoView({behavior:'auto', block:'center'});
@@ -1058,7 +1101,7 @@ function switchView(name){
 /* ---------- workout ---------- */
 let currentDay = 'A';
 let currentLoc = 'gym';
-let lastHowToSlug = null;   /* set when "▶ How to" jumps to a video, so Workout returns to that exercise */
+let lastHowTo = null;   /* {view, slug} — set when "▶ How to" jumps to a video, so that tab returns to the same exercise */
 /* current program (gym or home) + small label helpers */
 const P = () => PROGRAMS[currentLoc] || PROGRAMS.gym;
 const locOf = s => (s && s.loc === 'home') ? 'home' : 'gym';   /* older sessions had no loc → gym */
@@ -1177,7 +1220,7 @@ function renderWorkout(){
     if(prev) grow.appendChild(el('div','exlast','Last time: '+setSummary(ex, prev.sets)));
     head.appendChild(grow);
     const vbtn=el('button','vidlink','▶ How to');
-    vbtn.addEventListener('click', ()=>{ lastHowToSlug=ex.slug; switchView('exercises'); flashLib(ex.slug); });
+    vbtn.addEventListener('click', ()=>{ lastHowTo={view:'workout', slug:ex.slug}; switchView('exercises'); flashLib(ex.slug); });
     head.appendChild(vbtn);
     card.appendChild(head);
 
@@ -1456,6 +1499,133 @@ function flashLib(slug){
   const c=document.getElementById('lib-'+slug);
   if(!c) return;
   setTimeout(()=>{ c.scrollIntoView({behavior:'smooth', block:'start'}); c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }, 60);
+}
+/* ---------- feedback ---------- */
+/* every exercise once, with the days that use it */
+const ALL_EX = (()=>{
+  const out=[], bySlug={};
+  ['gym','home'].forEach(loc=>PROGRAMS[loc].order.forEach(dk=>{
+    PROGRAMS[loc].days[dk].exercises.forEach(ex=>{
+      if(!bySlug[ex.slug]) out.push(bySlug[ex.slug]={slug:ex.slug, name:ex.name, loc, days:[]});
+      bySlug[ex.slug].days.push(dk);
+    });
+  }));
+  return out;
+})();
+const fbWhere = e => e.loc==='home' ? 'Home '+e.days.join(', ') : (e.days.length>1?'Days ':'Day ')+e.days.join(', ');
+function setFeedback(slug, patch){
+  const f={r:'', note:'', ...(state.feedback[slug]||{}), ...patch, at:todayYmd()};
+  if(!f.r && !f.note.trim()) delete state.feedback[slug]; else state.feedback[slug]=f;
+  save(); renderFeedbackCount();
+}
+function renderFeedbackCount(){
+  let up=0, down=0;
+  ALL_EX.forEach(e=>{ const r=(state.feedback[e.slug]||{}).r; if(r==='up') up++; else if(r==='down') down++; });
+  $('#fbCount').textContent='Rated '+(up+down)+' of '+ALL_EX.length+(up+down ? ' · 👍 '+up+' · 👎 '+down : '');
+}
+function renderFeedback(){
+  const list=$('#feedbackList'); list.textContent='';
+  [['gym','🏋️ At the gym'],['home','🏠 At home']].forEach(([lk,ltitle])=>{
+    const ph=el('h2','',ltitle); ph.style.margin='22px 4px 10px';
+    list.appendChild(ph);
+    ALL_EX.filter(e=>e.loc===lk).forEach(e=>{
+      const f=state.feedback[e.slug]||{};
+      const card=el('div','card fbcard'); card.dataset.slug=e.slug;
+      const head=el('div','fbhead');
+      const grow=el('div','grow');
+      grow.appendChild(el('div','fbname',e.name));
+      grow.appendChild(el('div','fbwhere',fbWhere(e)));
+      head.appendChild(grow);
+      const vbtn=el('button','vidlink','▶ How to');
+      vbtn.addEventListener('click', ()=>{ lastHowTo={view:'feedback', slug:e.slug}; switchView('exercises'); flashLib(e.slug); });
+      head.appendChild(vbtn);
+      card.appendChild(head);
+
+      const foot=el('div','exfoot');
+      const btns={};
+      const paint=r=>{
+        card.classList.toggle('up', r==='up'); card.classList.toggle('down', r==='down');
+        for(const k in btns){ btns[k].classList.toggle('on', k===r); btns[k].setAttribute('aria-pressed', k===r); }
+      };
+      [['up','👍 Like'],['down','👎 Don’t like']].forEach(([r,label])=>{
+        const b=btns[r]=el('button','btn ghost sm fbbtn '+r, label);
+        b.addEventListener('click', ()=>{
+          const now=(state.feedback[e.slug]||{}).r===r ? '' : r;   /* tap the same button again to clear it */
+          setFeedback(e.slug, {r:now}); paint(now);
+        });
+        foot.appendChild(b);
+      });
+      paint(f.r||'');
+      const note=el('input','note'); note.type='text'; note.placeholder='Why? A few words (optional)';
+      note.setAttribute('aria-label','Why — '+e.name);
+      note.value=f.note||'';
+      note.addEventListener('input', ()=>setFeedback(e.slug, {note:note.value}));
+      foot.appendChild(note);
+      card.appendChild(foot);
+      list.appendChild(card);
+    });
+  });
+  $('#fbGeneral').value=state.feedbackNote;
+  renderFeedbackCount();
+}
+/* the whole feedback as plain text, ready to paste into a chat */
+function feedbackText(){
+  const fb=e=>state.feedback[e.slug]||{};
+  const noteOf=e=>(fb(e).note||'').trim();
+  const line=e=>'• '+e.name+' ['+(e.loc==='home'?'':'Gym ')+fbWhere(e)+']'+(noteOf(e)?' — '+noteOf(e):'')+(fb(e).at?' ('+fmtNice(fb(e).at)+')':'');
+  const down=ALL_EX.filter(e=>fb(e).r==='down'), up=ALL_EX.filter(e=>fb(e).r==='up');
+  const noted=ALL_EX.filter(e=>!fb(e).r && noteOf(e));
+  const rest=ALL_EX.filter(e=>!fb(e).r && !noteOf(e));
+  const out=['GYM TRACKER — MY EXERCISE FEEDBACK',
+    todayYmd()+' · app '+$('.topbar .ver').textContent+' · rated '+(down.length+up.length)+' of '+ALL_EX.length];
+  const block=(title, rows)=>{ if(rows.length) out.push('', title+' ('+rows.length+')', ...rows); };
+  block('👎 DON’T LIKE', down.map(line));
+  block('👍 LIKE', up.map(line));
+  block('📝 NOTE ONLY, NO RATING', noted.map(line));
+  if(state.feedbackNote.trim()) out.push('', 'ANYTHING ELSE', state.feedbackNote.trim());
+  /* notes typed on exercises during workouts, newest first */
+  const names={}; ALL_EX.forEach(e=>names[e.slug]=e.name);
+  const wn=[];
+  Object.keys(state.sessions).sort().reverse().forEach(d=>{
+    const s=state.sessions[d];
+    Object.entries(s.ex||{}).forEach(([slug,x])=>{
+      if(x && x.note && x.note.trim()) wn.push('• '+d+' · '+dayName(locOf(s), s.day||'?')+' · '+(names[slug]||slug)+': '+x.note.trim());
+    });
+  });
+  block('NOTES WRITTEN DURING WORKOUTS', wn.slice(0,30));
+  if(rest.length){
+    out.push('', 'NOT RATED ('+rest.length+')');
+    [['gym','Gym: '],['home','Home: ']].forEach(([lk,pre])=>{
+      const r=rest.filter(e=>e.loc===lk);
+      if(r.length) out.push(pre+r.map(e=>e.name).join(', '));
+    });
+  }
+  return out.join('\n');
+}
+function bindFeedback(){
+  $('#fbGeneral').addEventListener('input', ev=>{ state.feedbackNote=ev.target.value; save(); });
+  const ready=()=>{
+    if(Object.keys(state.feedback).length || state.feedbackNote.trim()) return true;
+    showToast('Rate an exercise first 👍 👎'); return false;
+  };
+  $$('.fbcopy').forEach(b=>b.addEventListener('click', ()=>{
+    if(!ready()) return;
+    const text=feedbackText(), box=$('#fbBox');
+    box.hidden=false; box.value=text;
+    const done=()=>showToast('Copied ✓ — paste it into the chat');
+    const manual=()=>{
+      box.focus(); box.select();
+      let ok=false; try{ ok=document.execCommand('copy'); }catch(e){}
+      if(ok) done(); else showToast('Select the text and copy manually');
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, manual);
+    else manual();
+  }));
+  $$('.fbshare').forEach(b=>{
+    if(!navigator.share) return;
+    b.hidden=false;
+    b.addEventListener('click', ()=>{ if(ready()) navigator.share({title:'Gym Tracker — my exercise feedback', text:feedbackText()}).catch(()=>{}); });
+  });
 }
 /* ---------- meals ---------- */
 function renderMeals(){
@@ -1832,7 +2002,7 @@ function bindBackup(){
     ]);
   });
   $('#btnWipe').addEventListener('click', ()=>{
-    showModal('Clear all data?', 'This deletes every workout, measurement and meal edit saved on this device. Export a backup first if you need it.', [
+    showModal('Clear all data?', 'This deletes every workout, measurement, meal edit and feedback note saved on this device. Export a backup first if you need it.', [
       {label:'Cancel'},
       {label:'Delete everything', cls:'danger', fn:()=>{ localStorage.removeItem(STORE_KEY); location.reload(); }}
     ]);
@@ -1851,7 +2021,9 @@ function applyImport(imp, replace){
       sessions:{...state.sessions, ...imp.sessions},
       measurements:Object.values(byDate).sort((a,b)=>a.date<b.date?-1:1),
       mealEdits:{...state.mealEdits, ...imp.mealEdits},
-      shopping:{...state.shopping, ...imp.shopping}
+      shopping:{...state.shopping, ...imp.shopping},
+      feedback:{...state.feedback, ...imp.feedback},
+      feedbackNote:imp.feedbackNote || state.feedbackNote
     };
   }
   save(); applyTheme(); renderAll();
@@ -1901,7 +2073,7 @@ function bindTimer(){
 }
 /* ---------- init ---------- */
 function renderAll(){
-  renderDashboard(); renderLocSeg(); renderDaySeg(); renderWorkout(); renderLibrary(); renderMeals(); renderShopping(); renderProgress();
+  renderDashboard(); renderLocSeg(); renderDaySeg(); renderWorkout(); renderLibrary(); renderFeedback(); renderMeals(); renderShopping(); renderProgress();
 }
 function init(){
   applyTheme();
@@ -1966,7 +2138,7 @@ function init(){
     ]);
   });
 
-  bindBackup(); bindTimer();
+  bindBackup(); bindFeedback(); bindTimer();
   renderAll();
 
   let rzT=null;
