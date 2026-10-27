@@ -295,7 +295,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 <header class="app">
   <div class="wrap">
     <div class="topbar">
-      <h1>💪 Gym Tracker <span class="ver">v2.2</span></h1>
+      <h1>💪 Gym Tracker <span class="ver">v2.3</span></h1>
       <div class="grow"></div>
       <span class="date" id="todayLabel"></span>
       <button id="btnTheme" title="Switch light / dark">🌓</button>
@@ -327,7 +327,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
         <li>Style: moderate weights, 10–15 reps, stop 1–2 reps before failure. This builds a <b>lean, defined shape — not bulk</b>.</li>
         <li>Muscle grows slowly — you will look "toned" long before you could ever look "too big".</li>
         <li>Fat loss happens in the <b>Meal Plan</b> tab. The gym shapes the muscle; food removes the layer over it.</li>
-        <li><b>First session:</b> use the suggested weight shown under each exercise. Beating the top reps easily → go heavier next set. Can't reach the bottom → go lighter.</li>
+        <li><b>First session:</b> the suggested weight is already filled in. Beating the top reps easily → go heavier next set. Can't reach the bottom → go lighter.</li>
         <li>Add weight only when all sets reach the top of the rep range with good form (+2.5&nbsp;kg next time).</li>
       </ul>
     </div>
@@ -519,7 +519,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v2.2 · 27 October 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v2.3 · 27 October 2026</p>
   </section>
 
 </main>
@@ -1166,6 +1166,24 @@ const FIELD_DEFS = {
   c:[{f:'min',  ph:'min', step:'1', suf:'min'}, {f:'inc', ph:'%', step:'0.5', suf:'%'}, {f:'spd', ph:'km/h', step:'0.1', suf:'km/h'}],
   m:[{f:'min',  ph:'min', step:'1', suf:'min'}]
 };
+/* Each exercise's suggested start as numbers — filled into the boxes (dimmed) until there is history.
+   Keep in step with the start text. Reps need no entry: they come from the target (top of the range). */
+const START_NUM = {
+  'incline-db-press':{kg:12.5}, 'cable-fly':{kg:7.5}, 'seated-cable-row':{kg:35}, 'lateral-raise':{kg:7.5},
+  'leg-press':{kg:80}, 'smith-calf-raise':{kg:20}, 'pallof-press':{kg:5}, 'incline-walk':{min:10, inc:10, spd:5},
+  'lat-pulldown':{kg:40}, 'db-shoulder-press':{kg:10}, 'incline-machine-press':{kg:30}, 'face-pull':{kg:15},
+  'db-rdl':{kg:15}, 'cable-woodchop':{kg:10},
+  'leg-press-high':{kg:60}, 'chest-press-machine':{kg:25}, 'low-high-cable-fly':{kg:7.5}, 'one-arm-db-row':{kg:15}, 'leg-curl':{kg:30},
+  /* home — 0 kg = bodyweight */
+  'h-incline-db-press':{kg:10}, 'h-db-flye':{kg:10}, 'h-db-row':{kg:10}, 'h-lateral-raise':{kg:10}, 'h-reverse-lunge':{kg:0},
+  'h-plank':{sec:30}, 'h-walk':{min:10}, 'h-bb-row':{kg:50}, 'h-db-shoulder-press':{kg:10}, 'h-rear-delt':{kg:0},
+  'h-bb-rdl':{kg:50}, 'h-side-plank':{sec:20}, 'h-glute-bridge':{kg:60}, 'h-calf-raise':{kg:10}
+};
+const filled = v => v!==undefined && v!==null && v!=='';
+function startVal(exDef, f){
+  if(f==='reps'){ const n=(String(exDef.reps).match(/\d+/g)||[]).map(Number); return n.length ? Math.max(...n) : undefined; }
+  return (START_NUM[exDef.slug]||{})[f];
+}
 function renderLocSeg(){
   const seg=$('#locSeg'); seg.textContent='';
   [['gym','🏋️ Gym'],['home','🏠 Home']].forEach(([l,label])=>{
@@ -1209,7 +1227,7 @@ function renderWorkout(){
   mc.appendChild(top);
   const wu=el('p','small'); wu.textContent='Warm-up: '+day.warmup; wu.style.marginTop='8px';
   mc.appendChild(wu);
-  const pf=el('p','small'); pf.textContent='Sets are pre-filled with your last numbers (shown dimmed). Edit a number only when it changes — ticking done or finishing saves them, and next time starts from your new numbers.'; pf.style.marginTop='6px';
+  const pf=el('p','small'); pf.textContent='Sets are pre-filled (shown dimmed) with your last numbers — or the suggested start the first time. Change Set 1 and the sets below copy it. Ticking done or finishing saves them, and next time starts from your new numbers.'; pf.style.marginTop='6px';
   mc.appendChild(pf);
   meta.appendChild(mc);
   if(currentLoc==='home') meta.appendChild(homeGuideCard());
@@ -1247,7 +1265,7 @@ function renderWorkout(){
       addB.addEventListener('click', ()=>{
         commitExercise(ex, card);
         const s=ensureEx(ex); if(s.sets.length>=6) return;
-        s.sets.push({}); save(); renderWorkout();
+        s.sets.push({...s.sets[s.sets.length-1]}); save(); renderWorkout();   /* the new set starts as a copy of the last one */
       });
       foot.appendChild(addB);
       const remB=el('button','btn ghost sm','－ set');
@@ -1366,14 +1384,21 @@ function buildSetRow(exDef, idx, exData, prev){
     inp.dataset.f=fd.f; inp.dataset.idx=idx;
     inp.placeholder=fd.ph;
     const cur=exData && exData.sets && exData.sets[idx] ? exData.sets[idx][fd.f] : undefined;
-    const prevVal=prev && prev.sets && prev.sets[idx] ? prev.sets[idx][fd.f] : undefined;
     if(exData){
-      if(cur!==undefined && cur!==null && cur!=='') inp.value=cur;
-    }else if(prevVal!==undefined && prevVal!==null && prevVal!==''){
-      /* pre-fill from the last session; dimmed until it becomes part of today */
-      inp.value=prevVal; inp.classList.add('inh');
+      if(filled(cur)) inp.value=cur;
+    }else{
+      /* pre-fill, dimmed until it becomes part of today: last session's number,
+         else last session's Set 1, else the suggested start */
+      const pv=i=>prev && prev.sets && prev.sets[i] ? prev.sets[i][fd.f] : undefined;
+      const v=[pv(idx), pv(0), startVal(exDef, fd.f)].find(filled);
+      if(v!==undefined){ inp.value=v; inp.classList.add('inh'); }
     }
-    inp.addEventListener('input', ()=>commitExercise(exDef, row.closest('.ex')));
+    inp.addEventListener('input', ()=>{
+      const card=row.closest('.ex');
+      /* Set 1 leads: the sets below copy its number */
+      if(idx===0) card.querySelectorAll('input[data-f="'+fd.f+'"]').forEach(o=>{ if(o!==inp) o.value=inp.value; });
+      commitExercise(exDef, card);
+    });
     row.appendChild(inp);
     if(fd.suf && exDef.type!=='w') row.appendChild(el('span','suf',fd.suf));
   });
