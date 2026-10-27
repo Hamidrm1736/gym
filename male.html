@@ -295,7 +295,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
 <header class="app">
   <div class="wrap">
     <div class="topbar">
-      <h1>💪 Gym Tracker <span class="ver">v2.1</span></h1>
+      <h1>💪 Gym Tracker <span class="ver">v2.2</span></h1>
       <div class="grow"></div>
       <span class="date" id="todayLabel"></span>
       <button id="btnTheme" title="Switch light / dark">🌓</button>
@@ -519,7 +519,7 @@ body{padding-bottom:calc(90px + env(safe-area-inset-bottom,0px))}
       <p class="small">Deletes all saved data on this device. Export a backup first!</p>
       <button class="btn danger" id="btnWipe" style="margin-top:10px">Clear all data</button>
     </div>
-    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v2.1 · 12 October 2026</p>
+    <p class="small" style="text-align:center; padding:4px 0 10px">Gym Tracker v2.2 · 27 October 2026</p>
   </section>
 
 </main>
@@ -559,14 +559,14 @@ const GYM_PROGRAM = {
           muscles:'Quads, glutes — big calorie burner',
           cues:['Feet shoulder-width, middle of the platform','Lower until knees reach about 90°','Knees track in line with your toes','Push through the whole foot; don’t slam the knees straight'],
           mistakes:['Going so deep your lower back rolls off the pad','Half reps with too much weight'] },
-        { slug:'calf-press', name:'Calf press (on the leg press machine)', sets:3, reps:'12–15', type:'w', rest:60, start:'40 kg — same machine as the leg press, straight after it',
-          muscles:'Calves — the one muscle the plan never reached before',
-          cues:['Stay on the leg press after your last set','Balls of the feet on the bottom edge of the platform, heels hanging off','Push through the toes as far as you can, squeeze the calves 1 second','Lower slowly until you feel a deep stretch — the stretch is half the exercise','Keep a slight bend in the knees the whole time'],
-          mistakes:['Bouncing fast half reps','Locking the knees out hard'] },
-        { slug:'ab-crunch-machine', name:'Ab crunch machine (seated)', sets:3, reps:'12–15', type:'w', rest:60, start:'25 kg stack — light enough to curl smoothly',
-          muscles:'Abs — the machine version of a crunch',
-          cues:['Sit down and set the pads or handles snug against you','Curl the ribs down toward the hips — round the spine','Squeeze 1 second, then return slowly without letting the stack slam','You do this one on Day A and Day C — use the same weight on both days','Machine busy? Do the knee raise from Day B instead'],
-          mistakes:['Pulling with the arms instead of curling with the abs','Letting the weight yank you back open fast'] },
+        { slug:'smith-calf-raise', name:'Smith machine calf raise', sets:3, reps:'12–15', type:'w', rest:60, start:'A 10 kg plate each side — enter 20 kg (count the plates, not the bar)',
+          muscles:'Calves — the back of the lower legs',
+          cues:['The Smith machine is the bar that slides up and down on two rails','Set the bar at shoulder height and put a low step or a flat weight plate under it (no step? stand flat on the floor — it still works)','Step under so the bar sits across your upper back, not your neck. Balls of the feet on the edge of the step, heels hanging off','Turn the bar to unhook it. Rise up on your toes as high as you can and squeeze the calves 1 second','Lower slowly until you feel a deep stretch — the stretch is half the exercise','Knees almost straight the whole time. Finished? Turn the bar to hook it back on before you step out','Smith machine busy? Hold a dumbbell in each hand and do the same move on the step'],
+          mistakes:['Bouncing fast half reps','Bending the knees to help push the weight up','Stepping out before the bar is hooked back on'] },
+        { slug:'pallof-press', name:'Cable Pallof press (standing, press and hold)', sets:3, reps:'10 / side', type:'w', rest:60, start:'5–10 kg — light enough to stay perfectly still',
+          muscles:'Stomach and the sides of the waist — they work to stop the cable turning you',
+          cues:['Set the pulley at chest height and clip on one handle','Stand side-on to the machine, one big step away, feet shoulder-width, knees soft','Hold the handle with both hands against the middle of your chest — the cable should feel tight','Tighten your stomach, then press the handle straight out in front of your chest','Hold 2 seconds with straight arms — don’t let the cable pull you round','Bring it back to your chest slowly. All reps one side, then turn around and do the other side','You do this one on Day A and Day C — use the same weight on both days','Cable machine busy? Do the knee raise from Day B instead'],
+          mistakes:['Hands drifting toward the machine — keep them in line with the middle of your chest','Leaning or twisting away from the machine to fight the weight','Going too heavy — if your body turns, drop the weight'] },
         { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
           cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','Don’t hold the rails (light touch for balance is fine)','Steady pace — you should be able to talk, just barely','Fancy a change? 10 min on the exercise bike or cross-trainer at the same effort counts too'],
@@ -631,10 +631,10 @@ const GYM_PROGRAM = {
           muscles:'Hamstrings',
           cues:['Pad snug just above the heels','Curl smoothly to a full squeeze, hold 1 second','Take 2–3 seconds on the way back — that’s where the muscle is built'],
           mistakes:['Hips lifting off the pad','Kicking fast and dropping fast'] },
-        { slug:'ab-crunch-machine', name:'Ab crunch machine (seated)', sets:3, reps:'12–15', type:'w', rest:60, start:'25 kg stack — light enough to curl smoothly',
-          muscles:'Abs — the machine version of a crunch',
-          cues:['Sit down and set the pads or handles snug against you','Curl the ribs down toward the hips — round the spine','Squeeze 1 second, then return slowly without letting the stack slam','You do this one on Day A and Day C — use the same weight on both days','Machine busy? Do the knee raise from Day B instead'],
-          mistakes:['Pulling with the arms instead of curling with the abs','Letting the weight yank you back open fast'] },
+        { slug:'pallof-press', name:'Cable Pallof press (standing, press and hold)', sets:3, reps:'10 / side', type:'w', rest:60, start:'5–10 kg — light enough to stay perfectly still',
+          muscles:'Stomach and the sides of the waist — they work to stop the cable turning you',
+          cues:['Set the pulley at chest height and clip on one handle','Stand side-on to the machine, one big step away, feet shoulder-width, knees soft','Hold the handle with both hands against the middle of your chest — the cable should feel tight','Tighten your stomach, then press the handle straight out in front of your chest','Hold 2 seconds with straight arms — don’t let the cable pull you round','Bring it back to your chest slowly. All reps one side, then turn around and do the other side','You do this one on Day A and Day C — use the same weight on both days','Cable machine busy? Do the knee raise from Day B instead'],
+          mistakes:['Hands drifting toward the machine — keep them in line with the middle of your chest','Leaning or twisting away from the machine to fight the weight','Going too heavy — if your body turns, drop the weight'] },
         { slug:'incline-walk', name:'Treadmill incline walk (finisher)', sets:1, reps:'10 min', type:'c', rest:0, start:'10–12% incline · 5 km/h',
           muscles:'Fat-burning finisher',
           cues:['Treadmill at 10–12% incline, about 4.5–5.5 km/h','No holding the rails','Steady pace, 10 minutes','Fancy a change? 10 min on the exercise bike or cross-trainer at the same effort counts too'],
@@ -827,6 +827,9 @@ const VIDEOS = {
   'ab-crunch-machine':     {id:'NpjB_rp756Y', title:'Life Fitness Circuit Series Ab Crunch Instructions', channel:'Life Fitness / Hammer Strength'},
   /* ---- swaps from feedback (verified 12 Oct 2026) ---- */
   'cable-woodchop':        {id:'WKFHw415Vdw', title:'Cable Woodchop (High to Low)', channel:'Discovery Learning'},
+  /* ---- not found at the gym (verified 27 Oct 2026) ---- */
+  'smith-calf-raise':      {id:'1lKjFPrYqf0', title:'Smith Machine Calf Raises — Quick Exercise Guide', channel:'nutritioneering'},
+  'pallof-press':          {id:'L7S-LE0wo6Q', title:'How To Do A Cable Pallof Press (Cable Core Press)', channel:'Live Lean TV Daily Exercises'},
   /* ---- home program (all verified 30 July 2026) ---- */
   'h-floor-press':      {id:'vAFw7EPL4eM', title:'Barbell Floor Press — Exercise Tutorial', channel:'Buff Dudes'},
   'h-incline-db-press': {id:'8iPEnn-ltC8', title:'How To: Dumbbell Incline Chest Press', channel:'ScottHermanFitness'},
@@ -888,6 +891,10 @@ const STEPS = {
     ['Seated ab crunch with cable 1.svg','Sit with the pads or handles set snug. Hips stay still — only the spine moves.'],
     ['Seated ab crunch with cable 2.svg','Curl the ribs down toward the hips, rounding the spine. Return slowly — don’t let the stack slam.']],
     n:'The picture shows the seated cable version — the crunch movement on the machine is exactly the same.'},
+  'smith-calf-raise':{i:[
+    ['Standing-barbell-calf-raise-1.gif','Bar across the upper back, balls of the feet on the edge of the step, heels low for a deep stretch.'],
+    ['Standing-barbell-calf-raise-2.gif','Rise up on your toes as high as you can and squeeze 1 second, then lower slowly. Knees stay almost straight.']],
+    n:'The picture shows a free barbell — on the Smith machine the bar slides on rails, but your feet and heels move exactly the same way.'},
   'lat-pulldown':{i:[
     ['Wide-grip-lat-pull-down-1.gif','Grip a little wider than the shoulders, chest up, arms straight overhead.'],
     ['Wide-grip-lat-pull-down-2.gif','Pull the bar to the upper chest, driving the elbows down and back. Squeeze 1 second, then slow on the way up.']]},
